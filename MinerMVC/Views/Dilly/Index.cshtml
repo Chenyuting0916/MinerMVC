@@ -27,7 +27,7 @@
 
 <h2>要做幾張:</h2> <div id="sum"></div>
 
-<a href="https://www.buymeacoffee.com/tim3767550h">給我錢，謝謝</a>
+<a target="_blank" href="https://www.buymeacoffee.com/tim3767550h">給我錢，謝謝</a>
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -39,7 +39,6 @@ $( "#sum" ).html("<h2>1</h2>");
 
 $( ".form-control" ).change(function() {
     
-    console.log($( "#版位" ));
   $( "#sum" ).html(
       "<h2>"+
         $( "#版位" ).val() * $( "#LOGO數量" ).val() *$( "#語系" ).val() +
