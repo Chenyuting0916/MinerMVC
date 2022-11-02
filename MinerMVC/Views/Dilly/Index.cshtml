@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Dilly Helper";
+}
+
+
+<img src="~/assert/bannermeme.png" alt=""  width="300">
+
+<h2> 計算機 </h2>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" >版位</span>
+    </div>
+    <input type="number" class="form-control" id="版位" aria-describedby="basic-addon3" value="1">
+</div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" >LOGO數量</span>
+    </div>
+    <input type="number" class="form-control" id="LOGO數量" aria-describedby="basic-addon3" value="1"> 
+</div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" >語系</span>
+    </div>
+    <input type="number" class="form-control" id="語系" aria-describedby="basic-addon3" value="1">
+</div>
+
+<h2>要做幾張:</h2> <div id="sum"></div>
+
+<a href="https://www.buymeacoffee.com/tim3767550h">給我錢，謝謝</a>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+
+$( "#sum" ).html("<h2>1</h2>");
+
+$( ".form-control" ).change(function() {
+    
+    console.log($( "#版位" ));
+  $( "#sum" ).html(
+      "<h2>"+
+        $( "#版位" ).val() * $( "#LOGO數量" ).val() *$( "#語系" ).val() +
+      "</h2>");
+});
+
+</script>
