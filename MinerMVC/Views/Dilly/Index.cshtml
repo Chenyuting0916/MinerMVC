@@ -14,18 +14,22 @@
 </div>
 <div class="input-group mb-3">
     <div class="input-group-prepend">
-        <span class="input-group-text" >LOGO數量</span>
-    </div>
-    <input type="number" class="form-control" id="LOGO數量" aria-describedby="basic-addon3" value="1"> 
-</div>
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
         <span class="input-group-text" >語系</span>
     </div>
     <input type="number" class="form-control" id="語系" aria-describedby="basic-addon3" value="1">
 </div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" >LOGO+QRcode數量</span>
+    </div>
+    <input type="number" class="form-control" id="LOGO數量" aria-describedby="basic-addon3" value="1"> 
+</div>
 
-<h2>要做幾張:</h2> <div id="sum"></div>
+<h2 id="info"></h2>
+<div id="resizeSum"></div>
+<div id="LanSum"></div>
+<div id="LogoSum"></div>
+
 
 <a target="_blank" href="https://www.buymeacoffee.com/tim3767550h">給我錢，謝謝</a>
 
@@ -38,11 +42,25 @@
 $( "#sum" ).html("<h2>1</h2>");
 
 $( ".form-control" ).change(function() {
-    
-  $( "#sum" ).html(
+  const bannerSize = $( "#版位" ).val(); 
+  const language = $( "#語系" ).val();
+  
+  $("#info").html("假設已有一張英文+logo的banner:");
+  
+  $( "#resizeSum" ).html(
       "<h2>"+
-        $( "#版位" ).val() * $( "#LOGO數量" ).val() *$( "#語系" ).val() +
+        "Resize要做幾張: " + (bannerSize - 1) +
       "</h2>");
+
+  $( "#LanSum" ).html(
+      "<h2>"+
+        "多語系要做幾張: " + bannerSize * (language - 1) +
+      "</h2>");
+  
+  $( "#LogoSum" ).html(
+        "<h2>"+
+          "Logo+Qrcode要改幾張: " + (bannerSize * language * $( "#LOGO數量" ).val() - 1) +
+        "</h2>");
 });
 
 </script>
