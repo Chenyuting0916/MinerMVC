@@ -96,6 +96,7 @@
     transition: all 0.4s ease;
     top: 50%;
     transform: translateY(-50%);
+    left: 60px;
 }
 .sidebar.open li .tooltip{
     display: none;
@@ -135,6 +136,7 @@
     color: #11101d;
 }
 .sidebar li a{
+    min-width: 50px;
     display: flex;
     height: 100%;
     width: 100%;
