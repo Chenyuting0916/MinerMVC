@@ -1,9 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Manage your time";
 }
-@* *@
-@* // 真的要做時間管理嗎師傅? *@
-@* // 想說要不要做直播網站，或是約會網站 *@
-@* // 或是要做資訊整理類網站，像是股票或啥的 *@
-@* // 虛擬貨幣遊戲 / 賭博? *@
-@* *@
+
+<script src="~/js/timer.js" asp-append-version="true"></script>
+
+<p id="demo"></p>
+
+<div>
+    minutes:
+    <form>
+        <input id="minutes" name="minutes" type="number"/>
+        <input type="submit"/>
+    </form>
+</div>
