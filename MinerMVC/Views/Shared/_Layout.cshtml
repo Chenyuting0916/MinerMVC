@@ -15,88 +15,50 @@
 
 </header>
 <div class="sidebar">
-  <div class="logo-details">
-    <i class='bx bx-timer icon'></i>
-    <div class="logo_name">TimeMiner</div>
-    <i class='bx bx-menu' id="btn" ></i>
-  </div>
-  <ul class="nav-list">
-    <li>
-      <i class='bx bx-search' ></i>
-      <input type="text" placeholder="Search...">
-      <span class="tooltip">Search</span>
-    </li>
-    <li>
-      <a asp-area="" asp-controller="Home" asp-action="Index">
-        <i class='bx bx-grid-alt'></i>
-        <span class="links_name">Dashboard</span>
-      </a>
-      <span class="tooltip">Dashboard</span>
-    </li>
-    @* <li> *@
-    @*   <a href="#"> *@
-    @*     <i class='bx bx-user' ></i> *@
-    @*     <span class="links_name">User</span> *@
-    @*   </a> *@
-    @*   <span class="tooltip">User</span> *@
-    @* </li> *@
-    @* <li> *@
-    @*   <a href="#"> *@
-    @*     <i class='bx bx-chat' ></i> *@
-    @*     <span class="links_name">Messages</span> *@
-    @*   </a> *@
-    @*   <span class="tooltip">Messages</span> *@
-    @* </li> *@
-    @* <li> *@
-    @*   <a href="#"> *@
-    @*     <i class='bx bx-pie-chart-alt-2' ></i> *@
-    @*     <span class="links_name">Analytics</span> *@
-    @*   </a> *@
-    @*   <span class="tooltip">Analytics</span> *@
-    @* </li> *@
-    @* <li> *@
-    @*   <a href="#"> *@
-    @*     <i class='bx bx-folder' ></i> *@
-    @*     <span class="links_name">File Manager</span> *@
-    @*   </a> *@
-    @*   <span class="tooltip">Files</span> *@
-    @* </li> *@
-    @* <li> *@
-    @*   <a href="#"> *@
-    @*     <i class='bx bx-cart-alt' ></i> *@
-    @*     <span class="links_name">Order</span> *@
-    @*   </a> *@
-    @*   <span class="tooltip">Order</span> *@
-    @* </li> *@
-    <li>
-      <a target="_blank" href="https://www.buymeacoffee.com/tim3767550h">
-        <i class='bx bx-heart' ></i>
-        <span class="links_name">Donate Tim</span>
-      </a>
-      <span class="tooltip">Donate</span>
-    </li>
-    @* <li> *@
-    @*   <a href="#"> *@
-    @*     <i class='bx bx-cog' ></i> *@
-    @*     <span class="links_name">Setting</span> *@
-    @*   </a> *@
-    @*   <span class="tooltip">Setting</span> *@
-    @* </li> *@
-    <li class="profile">
-      <div class="profile-details">
-        <div class="name_job">
-          <div class="name">Tim Chen</div>
-          <div class="job">Web developer</div>
-        </div>
-      </div>
-      <i class='bx bx-log-out' id="log_out" ></i>
-    </li>
-  </ul>
+    <div class="logo-details">
+        <i class='bx bx-timer icon'></i>
+        <div class="logo_name">TimeMiner</div>
+        <i class='bx bx-menu' id="btn"></i>
+    </div>
+    <ul class="nav-list">
+        <li>
+            <i class='bx bx-search'></i>
+            <input type="text" placeholder="Search...">
+            <span class="tooltip">Search</span>
+        </li>
+        <li>
+            <a asp-area="" asp-controller="Home" asp-action="Index">
+                <i class='bx bx-grid-alt'></i>
+                <span class="links_name">Dashboard</span>
+            </a>
+            <span class="tooltip">Dashboard</span>
+        </li>
+        <li>
+            <a target="_blank" href="https://www.buymeacoffee.com/tim3767550h">
+                <i class='bx bx-heart'></i>
+                <span class="links_name">Donate Tim</span>
+            </a>
+            <span class="tooltip">Donate</span>
+        </li>
+        <li class="profile">
+            <div class="profile-details">
+                <div class="name_job">
+                    <div class="name">Tim Chen</div>
+                    <div class="job">Web developer</div>
+                </div>
+            </div>
+            <div>
+                <a target="_blank" href="https://resume-cyt.herokuapp.com/index.html">
+                    <i class='bx bx-share' id="share"></i>
+                </a>
+            </div>
+        </li>
+    </ul>
 </div>
 <section class="home-section">
-  <div class="container">
-      @RenderBody()
-  </div>
+    <div class="container">
+        @RenderBody()
+    </div>
 </section>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
