@@ -2,14 +2,9 @@
     ViewData["Title"] = "Manage your time";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/timer.js" asp-append-version="true"></script>
 
-<p id="demo"></p>
 
-<div>
-    minutes:
-    <form>
-        <input id="minutes" name="minutes" type="number"/>
-        <input type="submit"/>
-    </form>
-</div>
+<button type="submit" class="btn btn-secondary" id="start">Start</button>
+<p id="demo"></p>
