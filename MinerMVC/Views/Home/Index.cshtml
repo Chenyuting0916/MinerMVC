@@ -5,6 +5,21 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/timer.js" asp-append-version="true"></script>
 
+<div class="container">
+    <div class="box">
+        <button type="submit" class="btn btn-secondary" id="start">Start</button>
+        <p id="demo"></p>
+        @* <i class='bx bx-time'></i> *@
+    </div>
+</div>
 
-<button type="submit" class="btn btn-secondary" id="start">Start</button>
-<p id="demo"></p>
+
+<style>
+
+.container{
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh;
+}
+</style>
