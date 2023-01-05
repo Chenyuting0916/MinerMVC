@@ -2,4 +2,21 @@
     ViewData["Title"] = "Manage your time";
 }
 
-<h2>title</h2>
+@model List<Company>
+
+<table>
+    竹科公司
+    <thead>
+    <tr>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+        </tr>
+    }
+    </tbody>
+</table>

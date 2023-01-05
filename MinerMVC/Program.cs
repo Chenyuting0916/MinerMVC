@@ -1,7 +1,11 @@
+using MinerMVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IJobCrawlerService, JobCrawlerService>();
 
 var app = builder.Build();
 
