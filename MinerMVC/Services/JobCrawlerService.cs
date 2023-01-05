@@ -17,7 +17,7 @@ public class JobCrawlerService : IJobCrawlerService
                                "&page=" + i);
             var nodes = doc.DocumentNode.SelectNodes("//td[@data-th='廠商名稱']");
 
-            var companies = nodes.Distinct().Select(node => new Company { Name = node.InnerText });
+            var companies = nodes.Distinct().Select(node => new Company(node.InnerText));
             allCompany.AddRange(companies);
         }
 
