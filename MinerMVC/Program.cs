@@ -1,10 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using MinerMVC.Data;
 using MinerMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<CustomExcelDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddScoped<IJobCrawlerService, JobCrawlerService>();
 
 var app = builder.Build();

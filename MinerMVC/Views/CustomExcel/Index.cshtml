@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Custom Excel";
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@model CustomExcel
+
+@using (Html.BeginForm("Index", "CustomExcel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description)
+        @Html.EditorFor(model => model.Description)
+        @Html.ValidationMessageFor(model => model.Description)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Image)
+        @Html.TextBoxFor(model => model.Image, new { type = "file" })
+        @Html.ValidationMessageFor(model => model.Image)
+    </div>
+
+    <input type="submit" value="Save" />
+}
