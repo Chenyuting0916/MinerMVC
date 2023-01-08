@@ -1,20 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MinerMVC.Data;
-using MinerMVC.Models;
+using MinerMVC.Models.CustomExcelDb;
 
 namespace MinerMVC.Controllers;
 
 public class CustomExcelController : Controller
 {
     private readonly CustomExcelDbContext _customExcelDbContext;
+    private readonly TodoListDbContext _todoListDbContext;
 
-    public CustomExcelController(CustomExcelDbContext customExcelDbContext)
+    public CustomExcelController(CustomExcelDbContext customExcelDbContext, TodoListDbContext todoListDbContext)
     {
         _customExcelDbContext = customExcelDbContext;
+        _todoListDbContext = todoListDbContext;
     }
 
     public IActionResult Index()
     {
+        var test = _todoListDbContext.TodoList.ToList();
         var model = _customExcelDbContext.CustomExcels.First();
         return View(model);
     }

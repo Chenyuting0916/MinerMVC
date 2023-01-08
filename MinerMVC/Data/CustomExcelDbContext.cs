@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MinerMVC.Models;
+using MinerMVC.Models.CustomExcelDb;
 
 namespace MinerMVC.Data;
 
