@@ -23,11 +23,11 @@
         @Html.ValidationMessageFor(model => model.Description)
     </div>
 
-    <div class="form-group">
+    @*<div class="form-group">
         @Html.LabelFor(model => model.Image)
         @Html.TextBoxFor(model => model.Image, new { type = "file" })
         @Html.ValidationMessageFor(model => model.Image)
-    </div>
+    </div>*@
 
     <input type="submit" value="Save" />
 }
