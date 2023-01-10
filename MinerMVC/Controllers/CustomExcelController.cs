@@ -27,11 +27,6 @@ public class CustomExcelController : Controller
     {
         if (!ModelState.IsValid) return View(model);
         // Check if image was uploaded
-        if (model.Image.Length > 0)
-        {
-            // Process image
-        }
-
         // Save form data
 
         _customExcelDbContext.CustomExcels.Add(model);
