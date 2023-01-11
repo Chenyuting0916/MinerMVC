@@ -26,12 +26,9 @@ public class CustomExcelController : Controller
     public IActionResult Index(CustomExcel model)
     {
         if (!ModelState.IsValid) return View(model);
-        // Check if image was uploaded
-        // Save form data
 
         _customExcelDbContext.CustomExcels.Add(model);
         _customExcelDbContext.SaveChanges();
-
 
         return RedirectToAction("Success");
     }
