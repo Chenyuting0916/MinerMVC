@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "mssql2": {
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/minermvcdbserver/databases/CustomExcelDb",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:CustomExcelDbContext",
+      "dynamicId": null
+    }
+  }
+}

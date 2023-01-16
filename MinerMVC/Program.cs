@@ -6,12 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<CustomExcelDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-builder.Services.AddDbContext<TodoListDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("TodoList");
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CustomExcelDbContext"));
 });
 
 builder.Services.AddControllersWithViews();
