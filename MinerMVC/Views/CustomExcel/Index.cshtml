@@ -3,31 +3,57 @@
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+@using MinerMVC.ViewModel
+@model List<MinerMVC.ViewModel.CustomExcelViewModel>
 
-@model MinerMVC.Models.CustomExcelDb.CustomExcel
+<script>
+$(document).ready(function() {
+    $(".image-thumbnail").on("click", function() {
+        let imageSrc = $(this).attr("src");
+        $("#modalImage").attr("src", imageSrc);
+        $("#imageModal").modal("show");
+    });
+    
+    
+});
+</script>
 
-@using (Html.BeginForm("Index", "CustomExcel", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
+<table class="table table-dark mt-5 text-center align-middle">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Verified</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var customExcel in Model.Select((value, index) => new { value, index }))
+    {
+        <tr>
+            <th scope="row" hidden="hidden">@customExcel.value.Id</th>
+            <th>@(customExcel.index + 1)</th>
+            <td>@customExcel.value.Name</td>
+            <td>@customExcel.value.Description</td>
+            <td>
+                <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImagePath" alt="Uploaded Image" width="100" height="100">
+            </td>
+            <td>
+                <input class="big-checkbox" type="checkbox" value="@customExcel.value.Verified">
+            </td>
+            <td>
+                <button type="button" class="btn btn-success">Edit</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name)
-        @Html.EditorFor(model => model.Name)
-        @Html.ValidationMessageFor(model => model.Name)
-    </div>
+@await Html.PartialAsync("_Insert", Model.FirstOrDefault(new CustomExcelViewModel()))
+@await Html.PartialAsync("_ScaleImage")
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Description)
-        @Html.EditorFor(model => model.Description)
-        @Html.ValidationMessageFor(model => model.Description)
-    </div>
-
-    @*<div class="form-group">
-        @Html.LabelFor(model => model.Image)
-        @Html.TextBoxFor(model => model.Image, new { type = "file" })
-        @Html.ValidationMessageFor(model => model.Image)
-    </div>*@
-
-    <input type="submit" value="Save" />
-}
+<style>
+    .big-checkbox {width: 30px; height: 30px;}
+</style>

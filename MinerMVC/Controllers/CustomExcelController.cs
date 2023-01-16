@@ -1,40 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MinerMVC.Data;
-using MinerMVC.Models.CustomExcelDb;
+using MinerMVC.Services;
+using MinerMVC.ViewModel;
 
 namespace MinerMVC.Controllers;
 
 public class CustomExcelController : Controller
 {
-    private readonly CustomExcelDbContext _customExcelDbContext;
-    private readonly TodoListDbContext _todoListDbContext;
+    private readonly ICustomExcelService _customExcelService;
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
-    public CustomExcelController(CustomExcelDbContext customExcelDbContext, TodoListDbContext todoListDbContext)
+    public CustomExcelController(ICustomExcelService customExcelService, IWebHostEnvironment hostingEnvironment)
     {
-        _customExcelDbContext = customExcelDbContext;
-        _todoListDbContext = todoListDbContext;
+        _customExcelService = customExcelService;
+        _hostingEnvironment = hostingEnvironment;
     }
 
     public IActionResult Index()
     {
-        var test = _todoListDbContext.TodoList.ToList();
-        var model = _customExcelDbContext.CustomExcels.First();
+        var model = _customExcelService.GetAll();
         return View(model);
     }
 
     [HttpPost]
-    public IActionResult Index(CustomExcel model)
+    public async Task<ActionResult> Insert(CustomExcelViewModel customExcel)
     {
-        if (!ModelState.IsValid) return View(model);
+        var image = customExcel.Image;
+        if (image != null)
+        {
+            var folder = Path.Combine(_hostingEnvironment.WebRootPath, "Contents");
+            var imageFileName = Guid.NewGuid() + image.FileName;
+            var fullPath = Path.Combine(folder, imageFileName);
+            await using Stream fileStream = new FileStream(fullPath, FileMode.Create);
+            await image.CopyToAsync(fileStream);
+            customExcel.ImagePath = imageFileName;
+        }
 
-        _customExcelDbContext.CustomExcels.Add(model);
-        _customExcelDbContext.SaveChanges();
-
-        return RedirectToAction("Success");
-    }
-
-    public IActionResult Success()
-    {
-        return View();
+        _customExcelService.Insert(customExcel);
+        return RedirectToAction("Index", "CustomExcel");
     }
 }

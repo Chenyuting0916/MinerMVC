@@ -1,0 +1,43 @@
+﻿@model MinerMVC.ViewModel.CustomExcelViewModel
+
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#UpsertModal">
+    Insert New
+</button>
+
+<div class="modal fade" id="UpsertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            @using (Html.BeginForm("Insert", "CustomExcel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary()
+
+                    <div class="col-md-4 mb-3 row">
+                        <label>Name</label>
+                        <input asp-for="@Model.Name" class="form-control" value="" required>
+                    </div>
+                    <div class="col-md-4 mb-3 row">
+                        <label>Description</label>
+                        <input asp-for="@Model.Description" class="form-control" value="">
+
+                    </div>
+                    <div class="custom-file row">
+                        <label class="custom-file-label">Image</label>
+                        <input asp-for="@Model.Image" class="custom-file-input" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
