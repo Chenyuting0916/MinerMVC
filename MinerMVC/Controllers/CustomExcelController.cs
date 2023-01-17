@@ -32,10 +32,29 @@ public class CustomExcelController : Controller
             var fullPath = Path.Combine(folder, imageFileName);
             await using Stream fileStream = new FileStream(fullPath, FileMode.Create);
             await image.CopyToAsync(fileStream);
-            customExcel.ImagePath = imageFileName;
+            customExcel.ImageName = imageFileName;
         }
 
         _customExcelService.Insert(customExcel);
+        return RedirectToAction("Index", "CustomExcel");
+    }
+
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        var customExcelViewModel = _customExcelService.Get(id);
+        if (customExcelViewModel.ImageName != null)
+        {
+            var folder = Path.Combine(_hostingEnvironment.WebRootPath, "Contents");
+            var fullPath = Path.Combine(folder, customExcelViewModel.ImageName);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+        }
+
+        _customExcelService.Delete(id);
         return RedirectToAction("Index", "CustomExcel");
     }
 }

@@ -4,6 +4,7 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 @using MinerMVC.ViewModel
+@using MinerMVC.Models.CustomExcelDb
 @model List<MinerMVC.ViewModel.CustomExcelViewModel>
 
 <script>
@@ -14,7 +15,18 @@ $(document).ready(function() {
         $("#imageModal").modal("show");
     });
     
-    
+     $(".edit").on("click", function() {
+        let id = $(this).parent().siblings().attr("id");
+        console.log(id)
+        // $("#modalImage").attr("src", imageSrc);
+        // $("#imageModal").modal("show");
+     });
+     
+     $(".delete").on("click", function() {
+        let id = $(this).parent().siblings().attr("id");
+        $("#customExcelId").attr("value", id);
+        $("#deleteModal").modal("show");
+     });
 });
 </script>
 
@@ -26,33 +38,35 @@ $(document).ready(function() {
         <th>Description</th>
         <th>Image</th>
         <th>Verified</th>
-        <th>Edit</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
     @foreach (var customExcel in Model.Select((value, index) => new { value, index }))
     {
         <tr>
-            <th scope="row" hidden="hidden">@customExcel.value.Id</th>
+            <th scope="row" hidden="hidden" id="@customExcel.value.Id">@customExcel.value.Id</th>
             <th>@(customExcel.index + 1)</th>
             <td>@customExcel.value.Name</td>
             <td>@customExcel.value.Description</td>
             <td>
-                <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImagePath" alt="Uploaded Image" width="100" height="100">
+                <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image" width="100" height="100">
             </td>
             <td>
                 <input class="big-checkbox" type="checkbox" value="@customExcel.value.Verified">
             </td>
             <td>
-                <button type="button" class="btn btn-success">Edit</button>
+                <button type="button" class="edit btn btn-success">Edit</button>
+                <button type="button" class="delete btn btn-danger">Delete</button>
             </td>
         </tr>
     }
     </tbody>
 </table>
 
-@await Html.PartialAsync("_Insert", Model.FirstOrDefault(new CustomExcelViewModel()))
+@await Html.PartialAsync("_Insert", Model.FirstOrDefault(new CustomExcelViewModel(new CustomExcel())))
 @await Html.PartialAsync("_ScaleImage")
+@await Html.PartialAsync("_Delete")
 
 <style>
     .big-checkbox {width: 30px; height: 30px;}

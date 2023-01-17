@@ -8,6 +8,6 @@ public class CustomExcel
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     [DefaultValue("default.png")]
-    public string? ImagePath { get; set; } 
+    public string? ImageName { get; set; } 
     public bool Verified { get; set; }
 }

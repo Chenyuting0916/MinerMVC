@@ -20,7 +20,7 @@ public class CustomExcelService : ICustomExcelService
             Description = viewModel.Description,
             Name = viewModel.Name,
             Verified = viewModel.Verified,
-            ImagePath = viewModel.ImagePath
+            ImageName = viewModel.ImageName
         };
         _customExcelDbContext.CustomExcels.Add(customExcel);
         _customExcelDbContext.SaveChanges();
@@ -28,13 +28,18 @@ public class CustomExcelService : ICustomExcelService
 
     public List<CustomExcelViewModel> GetAll()
     {
-        return _customExcelDbContext.CustomExcels.Select(x => new CustomExcelViewModel()
-        {
-            Description = x.Description,
-            Id = x.Id,
-            Name = x.Name,
-            Verified = x.Verified,
-            ImagePath = x.ImagePath
-        }).ToList();
+        return _customExcelDbContext.CustomExcels.Select(x => new CustomExcelViewModel(x)).ToList();
+    }
+
+    public void Delete(int id)
+    {
+        var customExcel = _customExcelDbContext.CustomExcels.First(x => x.Id == id);
+        _customExcelDbContext.CustomExcels.Remove(customExcel);
+        _customExcelDbContext.SaveChanges();
+    }
+
+    public CustomExcelViewModel Get(int id)
+    {
+        return new CustomExcelViewModel(_customExcelDbContext.CustomExcels.First(x => x.Id == id));
     }
 }
