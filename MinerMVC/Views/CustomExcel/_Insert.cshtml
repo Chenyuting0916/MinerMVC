@@ -19,16 +19,16 @@
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary()
 
-                    <div class="col-md-4 mb-3 row">
+                    <div>
                         <label>Name</label>
                         <input asp-for="@Model.Name" class="form-control" value="" required>
                     </div>
-                    <div class="col-md-4 mb-3 row">
+                    <div class="mt-5">
                         <label>Description</label>
-                        <input asp-for="@Model.Description" class="form-control" value="">
+                        <textarea asp-for="@Model.Description" class="form-control" value=""></textarea>
 
                     </div>
-                    <div class="custom-file row">
+                    <div class="custom-file row mt-5">
                         <label class="custom-file-label">Image</label>
                         <input asp-for="@Model.Image" class="custom-file-input" value="">
                     </div>
