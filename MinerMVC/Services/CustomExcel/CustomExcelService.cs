@@ -41,6 +41,7 @@ public class CustomExcelService : ICustomExcelService
         dbCustomExcel.Description = customExcel.Description;
         dbCustomExcel.Name = customExcel.Name;
         dbCustomExcel.ImageName = customExcel.ImageName;
+        dbCustomExcel.Verified = customExcel.Verified;
         _customExcelDbContext.SaveChanges();
     }
 }

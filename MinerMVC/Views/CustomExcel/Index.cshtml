@@ -19,13 +19,16 @@ $(document).ready(function() {
         let imageSrc = row.find('td img').attr("src");
         let name = row.find('td').attr("name");
         let description = row.find('td[description]').attr("description");
+        let verified = row.find('td input').attr("checked") === "checked";
                 
         $("#editId").val(id);
         $("#editName").val(name);
         $("#editDescription").val(description);
-        $("#editImagePreview").attr("src", imageSrc);
         $("#editImageName").attr("value", imageSrc.replace("/Contents/", ""));
-
+        $("#editVerified").attr("checked", verified).val(verified);
+        
+        $("#editImagePreview").attr("src", imageSrc);
+        
         $("#EditModal").modal("show");
      });
      
@@ -82,7 +85,7 @@ $(document).ready(function() {
                 <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image" width="100" height="100">
             </td>
             <td>
-                <input class="big-checkbox" type="checkbox" value="@customExcel.value.Verified">
+                <input class="big-checkbox" type="checkbox" checked="@customExcel.value.Verified">
             </td>
             <td>
                 <button type="button" class="edit btn btn-success">Edit</button>
