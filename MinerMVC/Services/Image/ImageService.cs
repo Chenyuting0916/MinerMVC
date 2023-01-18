@@ -12,7 +12,7 @@ public class ImageService : IImageService
 
     public async Task<string> AddImage(IFormFile? image)
     {
-        if (image == null) return DefaultImageName;
+        if (image is null) return DefaultImageName;
         
         var imageFileName = Guid.NewGuid() + image.FileName;
         var fullPath = Path.Combine(_folderPath, imageFileName);
@@ -33,7 +33,12 @@ public class ImageService : IImageService
         }
     }
 
-    public void EditImage()
+    public async Task<string> EditImage(IFormFile? newImage, string oldImageName)
     {
+        if (newImage is null) return oldImageName;
+        var newImageName = await AddImage(newImage);
+        DeleteImage(oldImageName);
+        
+        return newImageName;
     }
 }

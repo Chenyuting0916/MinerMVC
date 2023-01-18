@@ -4,5 +4,5 @@ public interface IImageService
 {
     public Task<string> AddImage(IFormFile? image);
     public void DeleteImage(string? imageName);
-    public void EditImage();
+    public Task<string> EditImage(IFormFile? newImage, string oldImageName);
 }

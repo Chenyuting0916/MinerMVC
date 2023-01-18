@@ -23,7 +23,7 @@ $(document).ready(function() {
         $("#editId").val(id);
         $("#editName").val(name);
         $("#editDescription").val(description);
-        $("#editImage").attr("src", imageSrc);
+        $("#editImagePreview").attr("src", imageSrc);
         $("#editImageName").attr("value", imageSrc.replace("/Contents/", ""));
 
         $("#EditModal").modal("show");
@@ -33,6 +33,28 @@ $(document).ready(function() {
         let id = $(this).parent().siblings().attr("id");
         $("#customExcelId").attr("value", id);
         $("#deleteModal").modal("show");
+     });
+     
+     $("#insertImage").change(function (){
+        let file = this.files[0];
+        let reader = new FileReader();
+       
+        reader.onload = function (e) {
+            $("#insertImagePreview").attr("src", e.target.result);
+        };
+       
+        reader.readAsDataURL(file);
+     });
+     
+     $("#editImage").change(function (){
+        let file = this.files[0];
+        let reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $("#editImagePreview").attr("src", e.target.result);
+        };
+        
+        reader.readAsDataURL(file);
      });
 });
 </script>

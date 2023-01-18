@@ -5,12 +5,11 @@
                 <h5 class="modal-title" id="EditModalLabel">Edit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-action="Edit" asp-controller="CustomExcel" method="post">
+            <form asp-action="Edit" asp-controller="CustomExcel" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
 
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary()
-
 
                     <div>
                         <label>Name</label>
@@ -23,8 +22,8 @@
                     </div>
                     <div class="custom-file row mt-5">
                         <label class="custom-file-label">Image</label>
-                        <img id="editImage" src="" alt="Uploaded Image" style="width:100px; height:100px;">
-                        <input type="file" name="Image" class="custom-file-input"/>
+                        <img id="editImagePreview" src="" alt="Uploaded Image" style="width:200px; height:200px;">
+                        <input id="editImage" name="Image" class="custom-file-input" type="file" value="">
                         <input name="ImageName" id="editImageName" hidden="hidden"/>
                     </div>
                 </div>

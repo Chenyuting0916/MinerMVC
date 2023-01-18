@@ -40,10 +40,12 @@ public class CustomExcelController : Controller
     }
 
     [HttpPost]
-    public IActionResult Edit(CustomExcelRequest customExcelRequest)
+    public async Task<IActionResult> Edit(CustomExcelRequest customExcelRequest)
     {
+        customExcelRequest.ImageName =
+            await _imageService.EditImage(customExcelRequest.Image, customExcelRequest.ImageName!);
+        
         _customExcelService.Edit(customExcelRequest.ToCustomExcel());
-        _imageService.EditImage();
         return RedirectToAction("Index", "CustomExcel");
     }
 }
