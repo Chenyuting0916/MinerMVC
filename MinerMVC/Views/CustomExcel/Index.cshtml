@@ -3,8 +3,6 @@
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-@using MinerMVC.ViewModel
-@using MinerMVC.Models.CustomExcelDb
 @model List<MinerMVC.ViewModel.CustomExcelViewModel>
 
 <script>
@@ -16,10 +14,19 @@ $(document).ready(function() {
     });
     
      $(".edit").on("click", function() {
-        let id = $(this).parent().siblings().attr("id");
-        console.log(id)
-        // $("#modalImage").attr("src", imageSrc);
-        // $("#imageModal").modal("show");
+        let row = $(this).closest('tr');
+        let id = row.find('th').attr("id");
+        let imageSrc = row.find('td img').attr("src");
+        let name = row.find('td').attr("name");
+        let description = row.find('td[description]').attr("description");
+                
+        $("#editId").val(id);
+        $("#editName").val(name);
+        $("#editDescription").val(description);
+        $("#editImage").attr("src", imageSrc);
+        $("#editImageName").attr("value", imageSrc.replace("/Contents/", ""));
+
+        $("#EditModal").modal("show");
      });
      
      $(".delete").on("click", function() {
@@ -47,8 +54,8 @@ $(document).ready(function() {
         <tr>
             <th scope="row" hidden="hidden" id="@customExcel.value.Id">@customExcel.value.Id</th>
             <th>@(customExcel.index + 1)</th>
-            <td>@customExcel.value.Name</td>
-            <td>@customExcel.value.Description</td>
+            <td name="@customExcel.value.Name">@customExcel.value.Name</td>
+            <td description="@customExcel.value.Description">@customExcel.value.Description</td>
             <td>
                 <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image" width="100" height="100">
             </td>
@@ -64,9 +71,10 @@ $(document).ready(function() {
     </tbody>
 </table>
 
-@await Html.PartialAsync("_Insert", Model.FirstOrDefault(new CustomExcelViewModel(new CustomExcel())))
+@await Html.PartialAsync("_Insert")
 @await Html.PartialAsync("_ScaleImage")
 @await Html.PartialAsync("_Delete")
+@await Html.PartialAsync("_Edit")
 
 <style>
     .big-checkbox {width: 30px; height: 30px;}

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MinerMVC.Data;
 using MinerMVC.Services;
+using MinerMVC.Services.Image;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<CustomExcelDbContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IJobCrawlerService, JobCrawlerService>();
 builder.Services.AddScoped<ICustomExcelService, CustomExcelService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 var app = builder.Build();
 

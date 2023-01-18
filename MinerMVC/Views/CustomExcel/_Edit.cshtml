@@ -1,40 +1,38 @@
-﻿<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#InsertModal">
-    Insert New
-</button>
-
-<div class="modal fade" id="InsertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+﻿<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Insert New</h5>
+                <h5 class="modal-title" id="EditModalLabel">Edit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            @using (Html.BeginForm("Insert", "CustomExcel", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
+            <form asp-action="Edit" asp-controller="CustomExcel" method="post">
                 <div class="modal-body">
 
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary()
 
+
                     <div>
                         <label>Name</label>
-                        <input name="Name" class="form-control" value="" required>
+                        <input id="editId" name="Id" class="form-control" hidden="hidden">
+                        <input id="editName" name="Name" class="form-control" required>
                     </div>
                     <div class="mt-5">
                         <label>Description</label>
-                        <textarea name="Description" class="form-control" value="" style="min-height:250px"></textarea>
-
+                        <textarea id="editDescription" name="Description" class="form-control" style="min-height:250px"></textarea>
                     </div>
                     <div class="custom-file row mt-5">
                         <label class="custom-file-label">Image</label>
-                        <input name="Image" class="custom-file-input" type="file" value="">
+                        <img id="editImage" src="" alt="Uploaded Image" style="width:100px; height:100px;">
+                        <input type="file" name="Image" class="custom-file-input"/>
+                        <input name="ImageName" id="editImageName" hidden="hidden"/>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
-            }
+            </form>
         </div>
     </div>
 </div>

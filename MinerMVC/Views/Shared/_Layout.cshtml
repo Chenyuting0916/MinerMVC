@@ -11,9 +11,6 @@
     <link rel="icon" type="image/x-icon" href="~/happy.ico">
 </head>
 <body>
-<header>
-
-</header>
 <div class="sidebar">
     <div class="logo-details">
         <i class='bx bx-timer icon'></i>
@@ -22,26 +19,26 @@
     </div>
     <ul class="nav-list">
         <li>
-            <a asp-area="" asp-controller="Home" asp-action="Index">
-                <i class='bx bx-grid-alt'></i>
-                <span class="links_name">Dashboard</span>
-            </a>
-            <span class="tooltip">Dashboard</span>
-        </li>
-        <li>
-            <a asp-area="" asp-controller="Job" asp-action="Index">
-                <i class='bx bxs-briefcase-alt-2'></i>
-                <span class="links_name">Job Hunting</span>
-            </a>
-            <span class="tooltip">Job Hunting</span>
-        </li>
-        <li>
             <a asp-area="" asp-controller="CustomExcel" asp-action="Index">
                 <i class='bx bx-spreadsheet'></i>
                 <span class="links_name">Custom Excel</span>
             </a>
             <span class="tooltip">Custom Excel</span>
         </li>
+        <li>
+            <a asp-area="" asp-controller="Timer" asp-action="Index">
+                <i class='bx bx-time-five'></i>
+                <span class="links_name">Timer</span>
+            </a>
+            <span class="tooltip">Timer</span>
+        </li>
+        @* <li> *@
+        @*     <a asp-area="" asp-controller="Job" asp-action="Index"> *@
+        @*         <i class='bx bxs-briefcase-alt-2'></i> *@
+        @*         <span class="links_name">Job Hunting</span> *@
+        @*     </a> *@
+        @*     <span class="tooltip">Job Hunting</span> *@
+        @* </li> *@
         <li>
             <a asp-area="" asp-controller="Dilly" asp-action="Index">
                 <i class='bx bxs-calculator'></i>
@@ -71,7 +68,7 @@
         </li>
     </ul>
 </div>
-<div class="container">
+<div class="container home-section">
     @RenderBody()
 </div>
 

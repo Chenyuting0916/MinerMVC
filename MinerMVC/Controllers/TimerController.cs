@@ -2,11 +2,11 @@
 
 namespace MinerMVC.Controllers;
 
-public class HomeController : Controller
+public class TimerController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<TimerController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public TimerController(ILogger<TimerController> logger)
     {
         _logger = logger;
     }

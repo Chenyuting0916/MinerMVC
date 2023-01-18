@@ -4,10 +4,6 @@ namespace MinerMVC.ViewModel;
 
 public class CustomExcelViewModel
 {
-    public CustomExcelViewModel()
-    {
-        
-    }
     public CustomExcelViewModel(CustomExcel customExcel)
     {
         Description = customExcel.Description;
@@ -16,12 +12,11 @@ public class CustomExcelViewModel
         Verified = customExcel.Verified;
         ImageName = customExcel.ImageName;
     }
-    
-    private const string DefaultImagePath = "default.png";
+
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; } = string.Empty;
-    public string? ImageName { get; set; } = DefaultImagePath;
+    public string Name { get; set; }
+    public string? Description { get; set; }
+    public string? ImageName { get; set; }
     public IFormFile? Image { get; set; }
     public bool Verified { get; set; }
 }

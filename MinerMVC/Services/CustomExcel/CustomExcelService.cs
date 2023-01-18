@@ -1,6 +1,5 @@
 ﻿using MinerMVC.Data;
 using MinerMVC.Models.CustomExcelDb;
-using MinerMVC.ViewModel;
 
 namespace MinerMVC.Services;
 
@@ -13,22 +12,15 @@ public class CustomExcelService : ICustomExcelService
         _customExcelDbContext = customExcelDbContext;
     }
 
-    public void Insert(CustomExcelViewModel viewModel)
+    public void Insert(CustomExcel customExcel)
     {
-        var customExcel = new CustomExcel()
-        {
-            Description = viewModel.Description,
-            Name = viewModel.Name,
-            Verified = viewModel.Verified,
-            ImageName = viewModel.ImageName
-        };
         _customExcelDbContext.CustomExcels.Add(customExcel);
         _customExcelDbContext.SaveChanges();
     }
 
-    public List<CustomExcelViewModel> GetAll()
+    public List<CustomExcel> GetAll()
     {
-        return _customExcelDbContext.CustomExcels.Select(x => new CustomExcelViewModel(x)).ToList();
+        return _customExcelDbContext.CustomExcels.ToList();
     }
 
     public void Delete(int id)
@@ -38,8 +30,17 @@ public class CustomExcelService : ICustomExcelService
         _customExcelDbContext.SaveChanges();
     }
 
-    public CustomExcelViewModel Get(int id)
+    public CustomExcel Get(int id)
     {
-        return new CustomExcelViewModel(_customExcelDbContext.CustomExcels.First(x => x.Id == id));
+        return _customExcelDbContext.CustomExcels.First(x => x.Id == id);
+    }
+
+    public void Edit(CustomExcel customExcel)
+    {
+        var dbCustomExcel = _customExcelDbContext.CustomExcels.First(x=>x.Id == customExcel.Id);
+        dbCustomExcel.Description = customExcel.Description;
+        dbCustomExcel.Name = customExcel.Name;
+        dbCustomExcel.ImageName = customExcel.ImageName;
+        _customExcelDbContext.SaveChanges();
     }
 }
