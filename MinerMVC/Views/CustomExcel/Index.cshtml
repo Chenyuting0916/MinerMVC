@@ -19,8 +19,8 @@ $(document).ready(function() {
         let imageSrc = row.find('td img').attr("src");
         let name = row.find('td').attr("name");
         let description = row.find('td[description]').attr("description");
-        let verified = row.find('td input').attr("checked") === "checked";
-                
+        let verified = row.find('td input').is(":checked");
+        
         $("#editId").val(id);
         $("#editName").val(name);
         $("#editDescription").val(description);
@@ -58,6 +58,17 @@ $(document).ready(function() {
         };
         
         reader.readAsDataURL(file);
+     });
+     
+     $(".big-checkbox").change(function () {
+         let row = $(this).closest('tr');
+         let id = row.find('th').attr("id");
+         let isChecked = $(this).is(":checked");
+         $.ajax({
+             url: '/CustomExcel/UpdateVerifiedStatus',
+             type: 'PUT',
+             data: { id: id, status: isChecked }
+         });
      });
 });
 </script>

@@ -44,8 +44,14 @@ public class CustomExcelController : Controller
     {
         customExcelRequest.ImageName =
             await _imageService.EditImage(customExcelRequest.Image, customExcelRequest.ImageName!);
-        
+
         _customExcelService.Edit(customExcelRequest.ToCustomExcel());
         return RedirectToAction("Index", "CustomExcel");
+    }
+
+    [HttpPut]
+    public void UpdateVerifiedStatus(int id, bool status)
+    {
+        _customExcelService.UpdateVerifiedStatus(id, status);
     }
 }

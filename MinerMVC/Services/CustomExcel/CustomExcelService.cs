@@ -44,4 +44,11 @@ public class CustomExcelService : ICustomExcelService
         dbCustomExcel.Verified = customExcel.Verified;
         _customExcelDbContext.SaveChanges();
     }
+
+    public void UpdateVerifiedStatus(int id, bool status)
+    {
+        var dbCustomExcel = _customExcelDbContext.CustomExcels.First(x=>x.Id == id);
+        dbCustomExcel.Verified = status;
+        _customExcelDbContext.SaveChanges();
+    }
 }

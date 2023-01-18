@@ -9,4 +9,5 @@ public interface ICustomExcelService
     public void Delete(int id);
     public CustomExcel Get(int id);
     public void Edit(CustomExcel model);
+    void UpdateVerifiedStatus(int id, bool status);
 }
