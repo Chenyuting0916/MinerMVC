@@ -17,8 +17,8 @@ public class LunchController : ControllerBase
 
     [HttpGet]
     [Route("Test")]
-    public List<CustomExcel> Test()
+    public string Test()
     {
-        return _customExcelService.GetAll().ToList();
+        return "Test";
     }
 }
