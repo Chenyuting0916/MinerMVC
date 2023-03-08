@@ -265,12 +265,23 @@
 }
 
 .sidebar.open ~ .home-section {
+    position: relative;
     left: 250px;
     width: calc(100% - 250px);
 }
 
+.home-section {
+    position: relative;
+    left: 58px;
+}
+
 @media (max-width: 420px) {
-    .sidebar li .tooltip {
+    .sidebar {
         display: none;
+    }
+
+    .home-section {
+        position: relative;
+        left: 0px;
     }
 }

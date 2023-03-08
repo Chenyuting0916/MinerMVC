@@ -1,99 +1,106 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TimeMiner</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
     <link rel="icon" type="image/x-icon" href="~/happy.ico">
 </head>
 <body>
-<div class="sidebar">
-    <div class="logo-details">
-        <i class='bx bx-timer icon'></i>
-        <div class="logo_name">TimeMiner</div>
-        <i class='bx bx-menu' id="btn"></i>
-    </div>
-    <ul class="nav-list">
-        <li>
-            <a asp-area="" asp-controller="CustomExcel" asp-action="Index">
-                <i class='bx bx-spreadsheet'></i>
-                <span class="links_name">Custom Excel</span>
-            </a>
-            <span class="tooltip">Custom Excel</span>
-        </li>
-        <li>
-            <a asp-area="" asp-controller="Timer" asp-action="Index">
-                <i class='bx bx-time-five'></i>
-                <span class="links_name">Timer</span>
-            </a>
-            <span class="tooltip">Timer</span>
-        </li>
-        @* <li> *@
-        @*     <a asp-area="" asp-controller="Job" asp-action="Index"> *@
-        @*         <i class='bx bxs-briefcase-alt-2'></i> *@
-        @*         <span class="links_name">Job Hunting</span> *@
-        @*     </a> *@
-        @*     <span class="tooltip">Job Hunting</span> *@
-        @* </li> *@
-        <li>
-            <a asp-area="" asp-controller="Dilly" asp-action="Index">
-                <i class='bx bxs-calculator'></i>
-                <span class="links_name">Dilly Calculator</span>
-            </a>
-            <span class="tooltip">Dilly Calculator</span>
-        </li>
-        <li>
-            <a target="_blank" href="https://www.buymeacoffee.com/tim3767550h">
-                <i class='bx bx-heart'></i>
-                <span class="links_name">Donate Tim</span>
-            </a>
-            <span class="tooltip">Donate</span>
-        </li>
-        <li class="profile">
-            <div class="profile-details">
-                <div class="name_job">
-                    <div class="name">Tim Chen</div>
-                    <div class="job">Backend Engineer</div>
-                </div>
-            </div>
-            <div>
-                <a target="_blank" href="https://chenyuting0916.github.io/My-First-Website/">
-                    <i class='bx bx-share' id="share"></i>
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bx-timer icon'></i>
+            <div class="logo_name">TimeMiner</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a asp-area="" asp-controller="Bauch" asp-action="Index">
+                    <i class='bx bxs-credit-card'></i>
+                    <span class="links_name">Bauch</span>
                 </a>
-            </div>
-        </li>
-    </ul>
-</div>
-<div class="container home-section">
-    @RenderBody()
-</div>
+                <span class="tooltip">Bauch</span>
+            </li>
+            <li>
+                <a asp-area="" asp-controller="CustomExcel" asp-action="Index">
+                    <i class='bx bx-spreadsheet'></i>
+                    <span class="links_name">Custom Excel</span>
+                </a>
+                <span class="tooltip">Custom Excel</span>
+            </li>
+            <li>
+                <a asp-area="" asp-controller="Timer" asp-action="Index">
+                    <i class='bx bx-time-five'></i>
+                    <span class="links_name">Timer</span>
+                </a>
+                <span class="tooltip">Timer</span>
+            </li>
+            @* <li> *@
+            @*     <a asp-area="" asp-controller="Job" asp-action="Index"> *@
+            @*         <i class='bx bxs-briefcase-alt-2'></i> *@
+            @*         <span class="links_name">Job Hunting</span> *@
+            @*     </a> *@
+            @*     <span class="tooltip">Job Hunting</span> *@
+            @* </li> *@
+           @* <li>
+                <a asp-area="" asp-controller="Dilly" asp-action="Index">
+                    <i class='bx bxs-calculator'></i>
+                    <span class="links_name">Dilly Calculator</span>
+                </a>
+                <span class="tooltip">Dilly Calculator</span>
+            </li>*@
+            <li>
+                <a target="_blank" href="https://www.buymeacoffee.com/tim3767550h">
+                    <i class='bx bx-heart'></i>
+                    <span class="links_name">Donate Tim</span>
+                </a>
+                <span class="tooltip">Donate</span>
+            </li>
+            <li class="profile">
+                <div class="profile-details">
+                    <div class="name_job">
+                        <div class="name">Tim Chen</div>
+                        <div class="job">Backend Engineer</div>
+                    </div>
+                </div>
+                <div>
+                    <a target="_blank" href="https://chenyuting0916.github.io/My-First-Website/">
+                        <i class='bx bx-share' id="share"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="container home-section">
+        @RenderBody()
+    </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-<script>
-  let sidebar = $(".sidebar");
-  let closeBtn = $("#btn");
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        let sidebar = $(".sidebar");
+        let closeBtn = $("#btn");
 
-  closeBtn.click(()=>{
-    sidebar.toggleClass("open");
-    menuBtnChange();
-  });
+        closeBtn.click(() => {
+            sidebar.toggleClass("open");
+            menuBtnChange();
+        });
 
-  function menuBtnChange() {
-   if(sidebar.hasClass("open")){
-     closeBtn.removeClass("bx-menu");
-     closeBtn.addClass("bx-menu-alt-right");
-   }else {
-       closeBtn.removeClass("bx-menu-alt-right");
-       closeBtn.addClass("bx-menu");
-   }
-  }
-  </script>
-@await RenderSectionAsync("Scripts", required: false)
+        function menuBtnChange() {
+            if (sidebar.hasClass("open")) {
+                closeBtn.removeClass("bx-menu");
+                closeBtn.addClass("bx-menu-alt-right");
+            } else {
+                closeBtn.removeClass("bx-menu-alt-right");
+                closeBtn.addClass("bx-menu");
+            }
+        }
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
