@@ -62,6 +62,10 @@
     transition: all 0.5s ease;
 }
 
+.logo-details{
+    left:2px;
+}
+
 .sidebar.open .logo-details #btn {
     text-align: right;
 }
