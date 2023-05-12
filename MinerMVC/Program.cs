@@ -34,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Bauch}/{action=Index}/{id?}");
+    pattern: "{controller=CustomExcel}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,109 +1,108 @@
 ﻿@{
     ViewData["Title"] = "Custom Excel";
 }
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 @model List<MinerMVC.ViewModel.CustomExcelViewModel>
 
 <script>
-$(document).ready(function() {
-    $(".image-thumbnail").on("click", function() {
-        let imageSrc = $(this).attr("src");
-        $("#modalImage").attr("src", imageSrc);
-        $("#imageModal").modal("show");
+    $(document).ready(function () {
+        $(".image-thumbnail").on("click", function () {
+            let imageSrc = $(this).attr("src");
+            $("#modalImage").attr("src", imageSrc);
+            $("#imageModal").modal("show");
+        });
+
+        $(".edit").on("click", function () {
+            let row = $(this).closest('tr');
+            let id = row.find('th').attr("id");
+            let imageSrc = row.find('td img').attr("src");
+            let name = row.find('td').attr("name");
+            let description = row.find('td[description]').attr("description");
+            let verified = row.find('td input').is(":checked");
+
+            $("#editId").val(id);
+            $("#editName").val(name);
+            $("#editDescription").val(description);
+            $("#editImageName").attr("value", imageSrc.replace("/Contents/", ""));
+            $("#editVerified").attr("checked", verified).val(verified);
+
+            $("#editImagePreview").attr("src", imageSrc);
+
+            $("#EditModal").modal("show");
+        });
+
+        $(".delete").on("click", function () {
+            let id = $(this).parent().siblings().attr("id");
+            $("#customExcelId").attr("value", id);
+            $("#deleteModal").modal("show");
+        });
+
+        $("#insertImage").change(function () {
+            let file = this.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $("#insertImagePreview").attr("src", e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        $("#editImage").change(function () {
+            let file = this.files[0];
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $("#editImagePreview").attr("src", e.target.result);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        $(".big-checkbox").change(function () {
+            let row = $(this).closest('tr');
+            let id = row.find('th').attr("id");
+            let isChecked = $(this).is(":checked");
+            $.ajax({
+                url: '/CustomExcel/UpdateVerifiedStatus',
+                type: 'PUT',
+                data: { id: id, status: isChecked }
+            });
+        });
     });
-    
-     $(".edit").on("click", function() {
-        let row = $(this).closest('tr');
-        let id = row.find('th').attr("id");
-        let imageSrc = row.find('td img').attr("src");
-        let name = row.find('td').attr("name");
-        let description = row.find('td[description]').attr("description");
-        let verified = row.find('td input').is(":checked");
-        
-        $("#editId").val(id);
-        $("#editName").val(name);
-        $("#editDescription").val(description);
-        $("#editImageName").attr("value", imageSrc.replace("/Contents/", ""));
-        $("#editVerified").attr("checked", verified).val(verified);
-        
-        $("#editImagePreview").attr("src", imageSrc);
-        
-        $("#EditModal").modal("show");
-     });
-     
-     $(".delete").on("click", function() {
-        let id = $(this).parent().siblings().attr("id");
-        $("#customExcelId").attr("value", id);
-        $("#deleteModal").modal("show");
-     });
-     
-     $("#insertImage").change(function (){
-        let file = this.files[0];
-        let reader = new FileReader();
-       
-        reader.onload = function (e) {
-            $("#insertImagePreview").attr("src", e.target.result);
-        };
-       
-        reader.readAsDataURL(file);
-     });
-     
-     $("#editImage").change(function (){
-        let file = this.files[0];
-        let reader = new FileReader();
-        
-        reader.onload = function (e) {
-            $("#editImagePreview").attr("src", e.target.result);
-        };
-        
-        reader.readAsDataURL(file);
-     });
-     
-     $(".big-checkbox").change(function () {
-         let row = $(this).closest('tr');
-         let id = row.find('th').attr("id");
-         let isChecked = $(this).is(":checked");
-         $.ajax({
-             url: '/CustomExcel/UpdateVerifiedStatus',
-             type: 'PUT',
-             data: { id: id, status: isChecked }
-         });
-     });
-});
 </script>
 
 <table class="table table-dark mt-5 text-center align-middle">
     <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Image</th>
-        <th>Verified</th>
-        <th>Action</th>
-    </tr>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Verified</th>
+            <th>Action</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var customExcel in Model.Select((value, index) => new { value, index }))
-    {
-        <tr>
-            <th scope="row" hidden="hidden" id="@customExcel.value.Id">@customExcel.value.Id</th>
-            <th>@(customExcel.index + 1)</th>
-            <td name="@customExcel.value.Name">@customExcel.value.Name</td>
-            <td description="@customExcel.value.Description">@customExcel.value.Description</td>
-            <td>
-                <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image" width="100" height="100">
-            </td>
-            <td>
-                <input class="big-checkbox" type="checkbox" checked="@customExcel.value.Verified">
-            </td>
-            <td>
-                <button type="button" class="edit btn btn-success">Edit</button>
-                <button type="button" class="delete btn btn-danger">Delete</button>
-            </td>
-        </tr>
-    }
+        @foreach (var customExcel in Model.Select((value, index) => new { value, index }))
+        {
+            <tr>
+                <th scope="row" hidden="hidden" id="@customExcel.value.Id">@customExcel.value.Id</th>
+                <th>@(customExcel.index + 1)</th>
+                <td style="white-space: pre-wrap;" name="@customExcel.value.Name">@customExcel.value.Name</td>
+                <td style="white-space: pre-wrap;" description="@customExcel.value.Description">@customExcel.value.Description</td>
+                <td>
+                    <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image" width="100" height="100">
+                </td>
+                <td>
+                    <input class="big-checkbox" type="checkbox" checked="@customExcel.value.Verified">
+                </td>
+                <td>
+                    <button type="button" class="edit btn btn-success">Edit</button>
+                    <button type="button" class="delete btn btn-danger">Delete</button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -113,5 +112,14 @@ $(document).ready(function() {
 @await Html.PartialAsync("_Edit")
 
 <style>
-    .big-checkbox {width: 30px; height: 30px;}
+    .big-checkbox {
+        width: 30px;
+        height: 30px;
+    }
+
+    .modal-body {
+        max-height: calc(100vh - 210px);
+        overflow-y: auto;
+    }
+
 </style>
