@@ -37,7 +37,7 @@ public class CustomExcelService : ICustomExcelService
 
     public void Edit(CustomExcel customExcel)
     {
-        var dbCustomExcel = _customExcelDbContext.CustomExcels.First(x=>x.Id == customExcel.Id);
+        var dbCustomExcel = _customExcelDbContext.CustomExcels.First(x => x.Id == customExcel.Id);
         dbCustomExcel.Description = customExcel.Description;
         dbCustomExcel.Name = customExcel.Name;
         dbCustomExcel.ImageName = customExcel.ImageName;
@@ -47,7 +47,7 @@ public class CustomExcelService : ICustomExcelService
 
     public void UpdateVerifiedStatus(int id, bool status)
     {
-        var dbCustomExcel = _customExcelDbContext.CustomExcels.First(x=>x.Id == id);
+        var dbCustomExcel = _customExcelDbContext.CustomExcels.First(x => x.Id == id);
         dbCustomExcel.Verified = status;
         _customExcelDbContext.SaveChanges();
     }

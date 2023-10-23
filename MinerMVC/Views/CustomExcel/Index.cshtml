@@ -72,7 +72,8 @@
     });
 </script>
 
-<table class="table table-dark mt-5 text-center align-middle">
+
+    <table style="table-layout: fixed"  class="table table-dark mt-5 text-center align-middle">
     <thead>
         <tr>
             <th>Id</th>
@@ -89,8 +90,8 @@
             <tr>
                 <th scope="row" hidden="hidden" id="@customExcel.value.Id">@customExcel.value.Id</th>
                 <th>@(customExcel.index + 1)</th>
-                <td style="white-space: pre-wrap;" name="@customExcel.value.Name">@customExcel.value.Name</td>
-                <td style="white-space: pre-wrap;" description="@customExcel.value.Description">@customExcel.value.Description</td>
+                <td style="word-break: break-all;" name="@customExcel.value.Name">@customExcel.value.Name</td>
+                <td style="word-break: break-all;" description="@customExcel.value.Description">@customExcel.value.Description</td>
                 <td>
                     <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image" width="100" height="100">
                 </td>
@@ -105,7 +106,6 @@
         }
     </tbody>
 </table>
-
 @await Html.PartialAsync("_Insert")
 @await Html.PartialAsync("_ScaleImage")
 @await Html.PartialAsync("_Delete")
