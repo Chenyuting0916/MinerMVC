@@ -270,8 +270,8 @@
 
 .sidebar.open ~ .home-section {
     position: relative;
-    left: 250px;
-    width: calc(100% - 250px);
+    left: 142px;
+    width: calc(100% - 300px);
 }
 
 .home-section {
@@ -280,12 +280,12 @@
 }
 
 @media (max-width: 420px) {
-    .sidebar {
+    /*.sidebar {
         display: none;
-    }
+    }*/
 
-    .home-section {
+    /*.home-section {
         position: relative;
         left: 0px;
-    }
+    }*/
 }
