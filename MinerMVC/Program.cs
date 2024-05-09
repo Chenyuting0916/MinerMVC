@@ -10,6 +10,11 @@ builder.Services.AddDbContext<CustomExcelDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CustomExcelDbContext"));
 });
 
+builder.Services.AddDbContext<DailyTaskDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DailyTaskDbContext"));
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IJobCrawlerService, JobCrawlerService>();
 builder.Services.AddScoped<ICustomExcelService, CustomExcelService>();
