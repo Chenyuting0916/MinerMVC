@@ -5,20 +5,66 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/timer.js" asp-append-version="true"></script>
 
-<div class="container">
-    <div class="box">
-        <button type="submit" class="btn btn-secondary" id="start">Start</button>
-        <p id="demo"></p>
+<div class="timer-container">
+    <div class="timer-box">
+        <div class="timer-display" id="demo">30:00</div>
+        <div class="timer-controls">
+            <button id="startButton" class="timer-button">
+                <i class='bx bx-play'></i>
+                Start
+            </button>
+        </div>
     </div>
 </div>
 
-
 <style>
-
-.container{
+.timer-container {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
     height: 100vh;
+}
+
+.timer-box {
+    background-color: var(--modal-bg);
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    font-family: 'Inter', monospace;
+    color: var(--text-color);
+}
+
+.timer-button {
+    font-size: 1.2rem;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    background-color: var(--button-bg);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.timer-button:hover {
+    background-color: var(--button-hover);
+}
+
+.timer-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.timer-button i {
+    font-size: 1.4rem;
 }
 </style>

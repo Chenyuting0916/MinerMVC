@@ -2,28 +2,34 @@
 const oneMinutes = oneSecond * 60;
 const oneHour = oneMinutes * 60;
 
-
 $(document).ready(() => {
-    $("#start").click(() => {
+    $("#startButton").click(() => {
         playStartSound();
         startCountDown();
-        $("#start").remove();
+        $("#startButton").prop('disabled', true);
     });
 });
 
 function startCountDown() {
     let countDownTime = 30 * 60 * 1000;
+    let timerDisplay = document.getElementById("demo");
 
     let x = setInterval(function () {
-
         let minutes = Math.floor((countDownTime % oneHour) / oneMinutes);
         let seconds = Math.floor((countDownTime % oneMinutes) / oneSecond);
 
-        document.getElementById("demo").innerHTML = minutes + "m " + seconds + "s ";
+        // 格式化顯示，確保個位數前面有0
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        timerDisplay.innerHTML = minutes + ":" + seconds;
 
         if (countDownTime <= 0) {
             clearInterval(x);
             playTimeUpSound();
+            timerDisplay.innerHTML = "00:00";
+            $("#startButton").prop('disabled', false);
+            return;
         }
 
         countDownTime -= oneSecond;

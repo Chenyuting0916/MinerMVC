@@ -163,8 +163,8 @@ body {
 }
 
 .activity-bar-icon:hover {
-    color: #ffffff;
-    background: var(--vscode-hover);
+    color: #fff;
+    background-color: var(--vscode-hover);
 }
 
 [data-theme="light"] .activity-bar-icon:hover {
@@ -172,7 +172,7 @@ body {
 }
 
 .activity-bar-icon.active {
-    color: #ffffff;
+    color: #fff;
 }
 
 [data-theme="light"] .activity-bar-icon.active {
@@ -406,4 +406,184 @@ body {
     white-space: nowrap;
     margin-left: 8px;
     z-index: 1000;
+}
+
+:root[data-theme="dark"] {
+    --vscode-bg: #1e1e1e;
+    --vscode-sidebar: #252526;
+    --vscode-hover: #2a2d2e;
+    --text-color: #ffffff;
+    --border-color: #454545;
+    --button-bg: #0e639c;
+    --button-hover: #1177bb;
+    --input-bg: #3c3c3c;
+    --input-border: #3c3c3c;
+    --table-header-bg: #2d2d2d;
+    --table-row-hover: #2a2d2e;
+    --modal-bg: #252526;
+    --checkbox-bg: #3c3c3c;
+    --checkbox-border: #6b6b6b;
+}
+
+:root[data-theme="light"] {
+    --vscode-bg: #ffffff;
+    --vscode-sidebar: #f3f3f3;
+    --vscode-hover: #e8e8e8;
+    --text-color: #333333;
+    --border-color: #e0e0e0;
+    --button-bg: #007acc;
+    --button-hover: #0098ff;
+    --input-bg: #ffffff;
+    --input-border: #cccccc;
+    --table-header-bg: #f5f5f5;
+    --table-row-hover: #f0f0f0;
+    --modal-bg: #ffffff;
+    --checkbox-bg: #ffffff;
+    --checkbox-border: #cccccc;
+}
+
+body {
+    background-color: var(--vscode-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-container {
+    background-color: var(--vscode-bg);
+    transition: background-color 0.3s ease;
+}
+
+.activity-bar {
+    background-color: var(--vscode-sidebar);
+    border-right: 1px solid var(--border-color);
+    transition: background-color 0.3s ease;
+}
+
+.activity-bar-icon {
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.activity-bar-icon:hover {
+    color: #fff;
+    background-color: var(--vscode-hover);
+}
+
+.content-area {
+    background-color: var(--vscode-bg);
+    transition: background-color 0.3s ease;
+}
+
+.modal-content {
+    background-color: var(--modal-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color);
+}
+
+.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    background-color: var(--input-bg);
+    border-color: var(--button-bg);
+    color: var(--text-color);
+}
+
+.btn-primary {
+    background-color: var(--button-bg) !important;
+    border-color: var(--button-bg) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--button-hover) !important;
+    border-color: var(--button-hover) !important;
+}
+
+.table {
+    color: var(--text-color);
+}
+
+.table thead th {
+    background-color: var(--table-header-bg);
+    border-color: var(--border-color);
+}
+
+.table tbody tr:hover {
+    background-color: var(--table-row-hover);
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.excel-checkbox {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: var(--checkbox-bg);
+    border: 2px solid var(--checkbox-border);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.excel-checkbox:checked {
+    background-color: var(--button-bg);
+    border-color: var(--button-bg);
+}
+
+.excel-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: #ffffff;
+    font-size: 14px;
+    left: 2px;
+    top: -2px;
+}
+
+.modal-content {
+    background-color: var(--modal-bg) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color);
+}
+
+.btn-primary {
+    background-color: var(--button-bg) !important;
+    border-color: var(--button-bg) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--button-hover) !important;
+    border-color: var(--button-hover) !important;
+}
+
+/* Timer styles */
+.timer-button {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #ffffff !important;
+}
+
+.timer-button:hover {
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+}
+
+.theme-toggle {
+    color: #fff;
+    background-color: var(--vscode-hover);
+}
+
+.theme-toggle:hover {
+    color: #fff;
+    background-color: var(--vscode-hover);
 }
