@@ -13,9 +13,9 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
     - name: Restore
@@ -33,7 +33,7 @@ jobs:
         publish-profile: ${{ secrets.TIMEMINER_FFFF }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Publish Artifacts
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v3
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

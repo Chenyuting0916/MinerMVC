@@ -42,7 +42,114 @@
     font-size: 18px;
 }
 
-/* Table styles */
+/* Card Grid Layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.excel-card {
+    background: var(--vscode-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: move; /* Indicates item is draggable */
+}
+
+.excel-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.card-image {
+    height: 180px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--vscode-sidebar);
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-image img:hover {
+    transform: scale(1.05);
+}
+
+.card-body {
+    padding: 12px;
+}
+
+.card-description {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.card-footer {
+    padding: 12px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card-verified {
+    display: flex;
+    align-items: center;
+}
+
+/* Ghost class for Sortable.js when dragging */
+.sortable-ghost {
+    opacity: 0.4;
+    background: var(--vscode-hover);
+}
+
+/* Element being dragged */
+.sortable-drag {
+    opacity: 0.8;
+    background: var(--vscode-hover);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* When dropping is chosen - visual indicator for drop zones */
+.sortable-chosen {
+    background-color: var(--vscode-hover);
+}
+
+/* Table styles - keeping these for backwards compatibility */
 .excel-table {
     width: 100%;
     border-collapse: collapse;
@@ -73,20 +180,14 @@
 
 /* Image styles */
 .image-thumbnail {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 4px;
     cursor: pointer;
     transition: transform 0.2s;
 }
 
-.image-thumbnail:hover {
-    transform: scale(1.1);
-}
-
 .img-preview {
-    display: none;
     max-width: 100%;
     margin-top: 10px;
     border-radius: 4px;

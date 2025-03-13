@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="~/css/custom-excel.css" />
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/custom-excel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 @model List<MinerMVC.ViewModel.CustomExcelViewModel>
 
@@ -22,44 +23,42 @@
     </div>
 </div>
 
-<div class="table-responsive">
-    <table class="excel-table">
-        <thead>
-            <tr>
-                <th style="width: 60px">No.</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th style="width: 100px; text-align: center;">Image</th>
-                <th style="width: 80px; text-align: center;">Verified</th>
-                <th style="width: 120px; text-align: center;">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var customExcel in Model.Select((value, index) => new { value, index }))
-            {
-                <tr>
-                    <td hidden id="@customExcel.value.Id">@customExcel.value.Id</td>
-                    <td class="align-middle">@(customExcel.index + 1)</td>
-                    <td class="align-middle" name="@customExcel.value.Name">@customExcel.value.Name</td>
-                    <td class="align-middle" description="@customExcel.value.Description">@customExcel.value.Description</td>
-                    <td class="text-center">
-                        <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image">
-                    </td>
-                    <td class="text-center align-middle">
+<div class="excel-container">
+    <div id="card-container" class="card-grid">
+        @foreach (var customExcel in Model.Select((value, index) => new { value, index }))
+        {
+            <div class="excel-card" data-id="@customExcel.value.Id">
+                <div class="card-header">
+                    <h3 class="card-title">@customExcel.value.Name</h3>
+                    <div class="card-verified">
                         <div class="checkbox-wrapper">
                             <input class="excel-checkbox" type="checkbox" checked="@customExcel.value.Verified">
                         </div>
-                    </td>
-                    <td class="text-center align-middle">
-                        <div class="action-buttons">
-                            <button type="button" class="btn btn-sm btn-primary edit me-1">Edit</button>
-                            <button type="button" class="btn btn-sm btn-danger delete">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    </div>
+                </div>
+                <div class="card-image">
+                    <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image">
+                </div>
+                <div class="card-body">
+                    <p class="card-description" title="@customExcel.value.Description">@customExcel.value.Description</p>
+                </div>
+                <div class="card-footer">
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-sm btn-primary edit me-1" data-id="@customExcel.value.Id" 
+                                data-name="@customExcel.value.Name" 
+                                data-description="@customExcel.value.Description" 
+                                data-image="@customExcel.value.ImageName"
+                                data-verified="@customExcel.value.Verified">
+                            <i class='bx bx-edit'></i> Edit
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger delete" data-id="@customExcel.value.Id">
+                            <i class='bx bx-trash'></i> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 <!-- Insert Modal -->

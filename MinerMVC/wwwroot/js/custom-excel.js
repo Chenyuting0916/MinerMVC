@@ -1,4 +1,29 @@
 $(document).ready(function () {
+    // Initialize SortableJS for the card grid
+    var cardContainer = document.getElementById('card-container');
+    if (cardContainer) {
+        new Sortable(cardContainer, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            handle: '.excel-card', // The entire card acts as a drag handle
+            onEnd: function(evt) {
+                // You can add AJAX call here to save the new order to backend
+                console.log('Card reordered: ' + evt.oldIndex + ' -> ' + evt.newIndex);
+                
+                // Get all card IDs in their new order
+                var cards = Array.from(cardContainer.children);
+                var newOrder = cards.map(function(card) {
+                    return card.getAttribute('data-id');
+                });
+                
+                // Log the new order (can be sent to server)
+                console.log('New order:', newOrder);
+            }
+        });
+    }
+
     // Refresh button
     $("#refreshButton").on("click", function () {
         window.location.reload();
@@ -14,19 +39,18 @@ $(document).ready(function () {
 
     // Edit button
     $(".edit").on("click", function () {
-        let row = $(this).closest('tr');
-        let id = row.find('td[hidden]').attr("id");
-        let imageSrc = row.find('td img').attr("src");
-        let name = row.find('td[name]').attr("name");
-        let description = row.find('td[description]').attr("description");
-        let verified = row.find('td input').prop("checked");
-
+        let id = $(this).data("id");
+        let name = $(this).data("name");
+        let description = $(this).data("description");
+        let image = $(this).data("image");
+        let verified = $(this).data("verified").toLowerCase() === "true";
+        
         $("#editId").val(id);
         $("#editName").val(name);
         $("#editDescription").val(description);
-        $("#editImageName").attr("value", imageSrc.replace("/Contents/", ""));
+        $("#editImageName").attr("value", image);
         $("#editVerified").prop("checked", verified);
-        $("#editImagePreview").attr("src", imageSrc);
+        $("#editImagePreview").attr("src", "/Contents/" + image);
 
         let editModal = new bootstrap.Modal(document.getElementById('EditModal'));
         editModal.show();
@@ -34,7 +58,7 @@ $(document).ready(function () {
 
     // Delete button
     $(".delete").on("click", function () {
-        let id = $(this).closest('tr').find('td[hidden]').attr("id");
+        let id = $(this).data("id");
         $("#customExcelId").val(id);
         let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         deleteModal.show();
@@ -90,9 +114,10 @@ $(document).ready(function () {
 
     // Checkbox status update
     $(".excel-checkbox").change(function () {
-        let row = $(this).closest('tr');
-        let id = row.find('td[hidden]').attr("id");
+        let card = $(this).closest('.excel-card');
+        let id = card.data("id");
         let isChecked = $(this).is(":checked");
+        
         $.ajax({
             url: '/CustomExcel/UpdateVerifiedStatus',
             type: 'PUT',
