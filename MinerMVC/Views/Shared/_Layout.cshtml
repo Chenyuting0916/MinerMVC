@@ -5,112 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TimeMiner</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
     <link rel="icon" type="image/x-icon" href="~/happy.ico">
-    <link href="~/assert/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 </head>
-<body>
-    <div class="sidebar">
-        <div class="logo-details">
-            <i class='bx bx-timer icon'></i>
-            <div class="logo_name">TimeMiner</div>
-            <i class='bx bx-menu' id="btn"></i>
+<body data-theme="dark">
+    <div class="app-container">
+        <div class="activity-bar">
+            <div class="top-actions">
+                <a asp-controller="Home" asp-action="Index" class="activity-bar-icon" title="Home">
+                    <i class='bx bx-home'></i>
+                </a>
+                <a asp-controller="CustomExcel" asp-action="Index" class="activity-bar-icon" title="Custom Excel">
+                    <i class='bx bx-table'></i>
+                </a>
+                <a asp-controller="Timer" asp-action="Index" class="activity-bar-icon" title="Timer">
+                    <i class='bx bx-time'></i>
+                </a>
+                <a href="https://www.buymeacoffee.com/timeminer" target="_blank" class="activity-bar-icon" title="Donate">
+                    <i class='bx bx-donate-heart'></i>
+                </a>
+            </div>
+            <div class="bottom-actions">
+                <button class="activity-bar-icon" id="themeToggle" title="Toggle Theme">
+                    <i class='bx bx-moon'></i>
+                </button>
+            </div>
         </div>
-        <ul class="nav-list">
-            @*<li>
-                <a asp-area="" asp-controller="Login" asp-action="Login">
-                    <i class='bx bx-user'></i>
-                    <span class="links_name">Login</span>
-                </a>
-                <span class="tooltip">Login</span>
-            </li>
-            <li>
-                <a asp-area="" asp-controller="Bauch" asp-action="Index">
-                    <i class='bx bxs-credit-card'></i>
-                    <span class="links_name">Portfolio Mgmt</span>
-                </a>
-                <span class="tooltip">Portfolio Management</span>
-            </li>*@
-            <li>
-                <a asp-area="" asp-controller="CustomExcel" asp-action="Index">
-                    <i class='bx bx-spreadsheet'></i>
-                    <span class="links_name">Custom Excel</span>
-                </a>
-                <span class="tooltip">Custom Excel</span>
-            </li>
-            <li>
-                <a asp-area="" asp-controller="Timer" asp-action="Index">
-                    <i class='bx bx-time-five'></i>
-                    <span class="links_name">Timer</span>
-                </a>
-                <span class="tooltip">Timer</span>
-            </li>
-            @* <li> *@
-            @*     <a asp-area="" asp-controller="Job" asp-action="Index"> *@
-            @*         <i class='bx bxs-briefcase-alt-2'></i> *@
-            @*         <span class="links_name">Job Hunting</span> *@
-            @*     </a> *@
-            @*     <span class="tooltip">Job Hunting</span> *@
-            @* </li> *@
-           @* <li>
-                <a asp-area="" asp-controller="Dilly" asp-action="Index">
-                    <i class='bx bxs-calculator'></i>
-                    <span class="links_name">Dilly Calculator</span>
-                </a>
-                <span class="tooltip">Dilly Calculator</span>
-            </li>*@
-            <li>
-                <a target="_blank" href="https://www.buymeacoffee.com/tim3767550h">
-                    <i class='bx bx-heart'></i>
-                    <span class="links_name">Donate Tim</span>
-                </a>
-                <span class="tooltip">Donate</span>
-            </li>
-           @* <li class="profile">
-                <div class="profile-details">
-                    <div class="name_job">
-                        <div class="name">Tim Chen</div>
-                        <div class="job">Backend Engineer</div>
-                    </div>
-                </div>
-                <div>
-                    <a target="_blank" href="https://chenyuting0916.github.io/My-First-Website/">
-                        <i class='bx bx-share' id="share"></i>
-                    </a>
-                </div>
-            </li>*@
-        </ul>
-    </div>
-    <div class="container home-section">
-        @RenderBody()
+        <main class="content-area">
+            @RenderBody()
+        </main>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <script>
-        let sidebar = $(".sidebar");
-        let closeBtn = $("#btn");
-
-        closeBtn.click(() => {
-            sidebar.toggleClass("open");
-            menuBtnChange();
-        });
-
-        function menuBtnChange() {
-            if (sidebar.hasClass("open")) {
-                closeBtn.removeClass("bx-menu");
-                closeBtn.addClass("bx-menu-alt-right");
-            } else {
-                closeBtn.removeClass("bx-menu-alt-right");
-                closeBtn.addClass("bx-menu");
-            }
-        }
-    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

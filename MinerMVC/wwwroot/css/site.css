@@ -1,21 +1,51 @@
+/* Global styles */
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Custom scrollbar - VSCode style */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 14px;
+  height: 14px;
 }
 
-::-webkit-scrollbar-thumb:window-inactive {
-  width: 5px;
-}
-
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
-  background-color: #333333;
-}
 ::-webkit-scrollbar-thumb {
-  box-shadow: inset 0 0 5px grey;
-  height: 20px;
-  background: rgb(219,219,219);
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+  height: 6px;
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  background-color: rgba(166, 166, 166, 0.4);
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(166, 166, 166, 0.7);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* Focus styles */
+*:focus {
+  outline: 1px solid rgba(255, 255, 255, 0.1);
+  outline-offset: -1px;
 }
 
 html {
@@ -46,4 +76,334 @@ body {
   width: calc(100% - 78px);
   transition: all 0.5s ease;
   z-index: 2;
+}
+
+:root {
+    --vscode-bg: #1e1e1e;
+    --vscode-sidebar: #252526;
+    --vscode-hover: #2a2d2e;
+    --text-color: #e0e0e0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --button-bg: #2d2d2d;
+    --button-hover: #3e3e3e;
+    --checkbox-border: #4d4d4d;
+    --input-bg: #3c3c3c;
+    --table-header: #2d2d2d;
+    --table-row-hover: #2a2d2e;
+}
+
+/* Light theme colors */
+:root[data-theme="light"] {
+    --vscode-bg: #ffffff;
+    --vscode-sidebar: #f3f3f3;
+    --vscode-hover: #e8e8e8;
+    --text-color: #333333;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --button-bg: #f5f5f5;
+    --button-hover: #e8e8e8;
+    --checkbox-border: #d1d1d1;
+    --input-bg: #ffffff;
+    --table-header: #f5f5f5;
+    --table-row-hover: #f8f9fa;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--vscode-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="light"] body {
+    color: #000000;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    background: var(--vscode-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.activity-bar {
+    width: 48px;
+    background: var(--vscode-sidebar);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 8px 0;
+    transition: background-color 0.3s ease;
+}
+
+.top-actions,
+.bottom-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.activity-bar-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+[data-theme="light"] .activity-bar-icon {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.activity-bar-icon:hover {
+    color: #ffffff;
+    background: var(--vscode-hover);
+}
+
+[data-theme="light"] .activity-bar-icon:hover {
+    color: #000000;
+}
+
+.activity-bar-icon.active {
+    color: #ffffff;
+}
+
+[data-theme="light"] .activity-bar-icon.active {
+    color: #000000;
+}
+
+.activity-bar-icon.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: currentColor;
+}
+
+.activity-bar-icon i {
+    font-size: 24px;
+}
+
+.content-area {
+    flex: 1;
+    background: var(--vscode-bg);
+    overflow: auto;
+    padding: 24px;
+    transition: background-color 0.3s ease;
+}
+
+[data-theme="light"] .content-area {
+    color: #000000;
+}
+
+/* Custom styles for Excel view */
+.excel-container {
+    background: var(--vscode-bg);
+    border-radius: 4px;
+    padding: 20px;
+    margin: 0;
+}
+
+[data-theme="light"] .excel-container {
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* General styles */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+/* Modal styles */
+.modal-content {
+    background: var(--vscode-bg);
+    color: #e0e0e0;
+}
+
+[data-theme="light"] .modal-content {
+    background: #ffffff;
+    color: #000000;
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+/* Button styles */
+.btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: var(--button-bg);
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: var(--button-hover);
+}
+
+.btn-primary {
+    background: #0078d4;
+    border-color: #0078d4;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #106ebe;
+    border-color: #106ebe;
+    color: #ffffff;
+}
+
+.btn-danger {
+    background: #d93025;
+    border-color: #d93025;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background: #c5221f;
+    border-color: #c5221f;
+}
+
+/* Form controls */
+.form-control {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.form-control:focus {
+    background: var(--input-bg);
+    border-color: #0078d4;
+    color: var(--text-color);
+}
+
+/* Checkbox styles */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.excel-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    border: 2px solid var(--checkbox-border);
+    background: var(--input-bg);
+    position: relative;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: all 0.2s ease;
+}
+
+.excel-checkbox:checked {
+    background: #0078d4;
+    border-color: #0078d4;
+}
+
+.excel-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    left: 3px;
+    top: -1px;
+}
+
+/* Table styles */
+.excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.excel-table th {
+    background: var(--table-header);
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.excel-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.excel-table tr:hover {
+    background: var(--table-row-hover);
+}
+
+/* Modal styles */
+.modal-content {
+    background: var(--vscode-bg);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+    background: var(--vscode-bg);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+    background: var(--vscode-bg);
+}
+
+/* Table styles */
+.table {
+    color: inherit;
+}
+
+[data-theme="light"] .table {
+    color: #000000;
+}
+
+.table th {
+    border-color: rgba(128, 128, 128, 0.2);
+}
+
+.table td {
+    border-color: rgba(128, 128, 128, 0.1);
+}
+
+/* Tooltip styles */
+[title] {
+    position: relative;
+}
+
+[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--vscode-hover);
+    color: inherit;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-left: 8px;
+    z-index: 1000;
 }

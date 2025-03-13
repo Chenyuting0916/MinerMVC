@@ -1,0 +1,338 @@
+/* Custom Excel styles */
+.excel-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--vscode-hover);
+    margin: -20px -20px 20px -20px;
+    background: var(--vscode-bg);
+}
+
+.excel-title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 24px;
+    color: inherit;
+}
+
+.excel-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.excel-button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--vscode-hover);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.excel-button:hover {
+    background: var(--vscode-hover);
+}
+
+.excel-button i {
+    font-size: 18px;
+}
+
+/* Table styles */
+.excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: var(--vscode-bg);
+}
+
+.excel-table th {
+    background: var(--vscode-hover);
+    padding: 12px;
+    text-align: left;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    color: inherit;
+}
+
+.excel-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--vscode-hover);
+    color: inherit;
+}
+
+.excel-table tr:hover {
+    background: var(--vscode-hover);
+}
+
+/* Image styles */
+.image-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.image-thumbnail:hover {
+    transform: scale(1.1);
+}
+
+.img-preview {
+    display: none;
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+/* Checkbox styles */
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.excel-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    appearance: none;
+    border: 2px solid var(--vscode-hover);
+    background: transparent;
+}
+
+.excel-checkbox:checked {
+    background: #4f46e5;
+    border-color: #4f46e5;
+}
+
+.excel-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    left: 3px;
+    top: -1px;
+}
+
+/* Button styles */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-button {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.edit-button {
+    background: #4f46e5;
+    color: white;
+}
+
+.delete-button {
+    background: #dc2626;
+    color: white;
+}
+
+.action-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Modal styles */
+.custom-modal .modal-content {
+    background: var(--vscode-bg);
+    border: 1px solid var(--vscode-hover);
+    border-radius: 8px;
+    color: inherit;
+}
+
+.custom-modal .modal-header {
+    border-bottom: 1px solid var(--vscode-hover);
+    padding: 16px;
+    background: var(--vscode-bg);
+}
+
+.custom-modal .modal-title {
+    color: inherit;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.custom-modal .close {
+    color: inherit;
+    opacity: 0.7;
+    padding: 0;
+    margin: -8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+}
+
+.custom-modal .close:hover {
+    opacity: 1;
+    background: var(--vscode-hover);
+}
+
+.custom-modal .modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--vscode-bg);
+}
+
+.custom-modal .modal-footer {
+    border-top: 1px solid var(--vscode-hover);
+    padding: 16px;
+    background: var(--vscode-bg);
+}
+
+.custom-modal .form-control {
+    background: var(--vscode-bg);
+    border: 1px solid var(--vscode-hover);
+    color: inherit;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.custom-modal .form-control:focus {
+    border-color: #4f46e5;
+    outline: none;
+    box-shadow: none;
+}
+
+.custom-modal .form-group {
+    margin-bottom: 1rem;
+}
+
+.custom-modal .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: inherit;
+}
+
+.custom-modal .form-check {
+    padding-left: 0;
+    margin-top: 1rem;
+}
+
+.custom-modal .form-check-input {
+    margin-right: 8px;
+}
+
+.custom-modal .form-check-label {
+    color: inherit;
+}
+
+.custom-modal .custom-file {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.custom-modal .custom-file-input {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: calc(1.5em + 1rem + 2px);
+    margin: 0;
+    opacity: 0;
+}
+
+.custom-modal .custom-file-label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: calc(1.5em + 1rem + 2px);
+    padding: 0.5rem 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: inherit;
+    background-color: var(--vscode-bg);
+    border: 1px solid var(--vscode-hover);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-modal .custom-file-label::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: block;
+    height: calc(1.5em + 1rem);
+    padding: 0.5rem 1rem;
+    line-height: 1.5;
+    color: inherit;
+    content: "Browse";
+    background-color: var(--vscode-hover);
+    border-left: inherit;
+    border-radius: 0 4px 4px 0;
+}
+
+/* Button styles in modal */
+.custom-modal .btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.custom-modal .btn-primary {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: white;
+}
+
+.custom-modal .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--vscode-hover);
+    color: inherit;
+}
+
+.custom-modal .btn-danger {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: white;
+}
+
+.custom-modal .btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Modal animation */
+.modal.fade .modal-dialog {
+    transition: transform .3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+} 
