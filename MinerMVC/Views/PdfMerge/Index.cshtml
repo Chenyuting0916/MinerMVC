@@ -1,0 +1,624 @@
+@{
+    ViewData["Title"] = "PDF合併工具";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">PDF合併工具</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger">
+                    <strong>錯誤：</strong> @ViewBag.ErrorMessage
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(ViewBag.FileName))
+            {
+                <div class="alert alert-success">
+                    <strong>合併成功！</strong> 
+                    <a href="/PdfMerge/Download?fileName=@ViewBag.FileName" class="btn btn-primary btn-sm">下載合併後的PDF</a>
+                    
+                    @if (!string.IsNullOrEmpty(ViewBag.PreviewUrl))
+                    {
+                        <button type="button" class="btn btn-info btn-sm ms-2" id="btnPreviewMerged" 
+                                data-preview-url="@ViewBag.PreviewUrl">預覽合併後的PDF</button>
+                    }
+                    
+                    @if (ViewBag.DeleteAfterDownload == true)
+                    {
+                        <div class="mt-2 text-muted small">
+                            <i class="bi bi-info-circle"></i> 提示：為了保護您的隱私，檔案將在下載後自動刪除，系統會在1小時後自動清理未下載的檔案。
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">上傳PDF文件</h5>
+                </div>
+                <div class="card-body">
+                    <form id="pdfUploadForm" method="post" enctype="multipart/form-data" onsubmit="return false;">
+                        <div class="mb-3">
+                            <label for="pdfFiles" class="form-label">選擇多個PDF文件（至少兩個）</label>
+                            <div class="file-upload-wrapper">
+                                <div class="file-upload-area" id="dropArea">
+                                    <div class="file-upload-message">
+                                        <i class="bi bi-cloud-arrow-up fs-1" style="display: inline-block; font-size: 2.5rem; color: #6c757d;"></i>
+                                        <p>將PDF文件拖放到此處，或點擊選擇文件</p>
+                                    </div>
+                                    <input type="file" multiple accept=".pdf" id="pdfFiles" class="form-control" required />
+                                </div>
+                                <div id="fileList" class="mt-2 d-none">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="mb-0">已選擇的文件：</h6>
+                                        <div>
+                                            <button type="button" id="clearFiles" class="btn btn-sm btn-outline-secondary">清除</button>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-info small">
+                                        <i class="bi bi-info-circle"></i> 您可以通過拖動調整PDF文件的排序順序。合併時將按此順序排列文件。
+                                    </div>
+                                    <ul class="list-group file-list sortable"></ul>
+                                </div>
+                            </div>
+                            <div class="text-muted small mt-1">
+                                <i class="bi bi-info-circle"></i> 支持的文件類型：PDF，最大文件大小：50MB
+                            </div>
+                            <div class="text-muted small">
+                                <i class="bi bi-info-circle"></i> 您可以多次上傳文件，新上傳的文件將會添加到列表末尾
+                            </div>
+                        </div>
+
+                        <div class="progress d-none mb-3" id="uploadProgress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary" id="btnMerge">
+                                <i class="bi bi-file-earmark-pdf"></i> 合併PDF
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btnPreview">
+                                <i class="bi bi-eye"></i> 預覽選擇的PDF
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">PDF預覽</h5>
+                </div>
+                <div class="card-body preview-container">
+                    <div id="previewPlaceholder" class="text-center py-5">
+                        <i class="bi bi-file-earmark fs-1 text-muted"></i>
+                        <p class="mt-3 text-muted">選擇PDF文件後將顯示預覽</p>
+                    </div>
+                    <iframe id="pdfPreview" style="width: 100%; height: 500px; display: none;" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全屏PDF預覽模態框 -->
+<div class="modal fade" id="fullscreenPreviewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">PDF預覽</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="fullscreenPdfPreview" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary" id="btnDeletePreview" data-file-name="">刪除此文件</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 初始化拖放功能
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('pdfFiles');
+            const fileList = document.getElementById('fileList');
+            const fileListUl = fileList.querySelector('.file-list');
+            const previewPlaceholder = document.getElementById('previewPlaceholder');
+            const pdfPreview = document.getElementById('pdfPreview');
+            const fullscreenPdfPreview = document.getElementById('fullscreenPdfPreview');
+            const uploadProgress = document.getElementById('uploadProgress');
+            const progressBar = uploadProgress.querySelector('.progress-bar');
+            const previewModal = new bootstrap.Modal(document.getElementById('fullscreenPreviewModal'));
+            const btnDeletePreview = document.getElementById('btnDeletePreview');
+            
+            // 初始化排序功能
+            let selectedFiles = []; // 存儲選中的文件
+            new Sortable(fileListUl, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                handle: '.drag-handle',
+                onEnd: function() {
+                    // 重新排序後，更新selectedFiles陣列
+                    updateSelectedFilesOrder();
+                }
+            });
+            
+            // 根據排序後的UI更新文件陣列
+            function updateSelectedFilesOrder() {
+                const newOrder = [];
+                const items = fileListUl.querySelectorAll('.list-item');
+                
+                items.forEach((item, newIndex) => {
+                    const oldIndex = parseInt(item.getAttribute('data-original-index'));
+                    newOrder.push(selectedFiles[oldIndex]);
+                    
+                    // 更新索引顯示
+                    const filename = item.querySelector('.filename');
+                    if (filename) {
+                        const originalText = filename.innerHTML;
+                        const updatedText = originalText.replace(/^\d+\./, `${newIndex + 1}.`);
+                        filename.innerHTML = updatedText;
+                    }
+                    
+                    // 更新按鈕索引
+                    const previewBtn = item.querySelector('.btn-preview');
+                    const removeBtn = item.querySelector('.btn-remove');
+                    if (previewBtn) previewBtn.setAttribute('data-index', newIndex);
+                    if (removeBtn) removeBtn.setAttribute('data-index', newIndex);
+                    
+                    // 更新元素索引
+                    item.setAttribute('data-original-index', newIndex);
+                });
+                
+                selectedFiles = newOrder;
+                console.log('文件順序已更新，目前順序:');
+                selectedFiles.forEach((file, idx) => {
+                    console.log(`${idx+1}. ${file.name}`);
+                });
+            }
+
+            // 拖放事件
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dropArea.classList.add('highlight');
+            }
+
+            function unhighlight() {
+                dropArea.classList.remove('highlight');
+            }
+
+            dropArea.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+
+            // 處理選擇的文件
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    // 將FileList轉換為Array並添加到現有文件列表，而不是覆蓋
+                    const newFiles = Array.from(files);
+                    // 合併新文件到已選擇的文件列表中
+                    selectedFiles = selectedFiles.concat(newFiles);
+                    updateFileList();
+                    console.log('檔案已添加，目前總數:', selectedFiles.length);
+                }
+            }
+
+            // 文件選擇更新
+            fileInput.addEventListener('change', function() {
+                console.log('檔案選擇事件被觸發', fileInput.files.length);
+                handleFiles(fileInput.files);
+                // 清空文件輸入，以便可以再次選擇相同的文件
+                fileInput.value = '';
+            });
+
+            function updateFileList() {
+                fileListUl.innerHTML = '';
+                if (selectedFiles.length > 0) {
+                    fileList.classList.remove('d-none');
+                    selectedFiles.forEach((file, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item d-flex justify-content-between align-items-center list-item';
+                        li.setAttribute('data-original-index', index);
+                        li.innerHTML = `
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <span class="drag-handle me-2" title="拖曳調整順序"><i class="bi bi-grip-vertical"></i></span>
+                                <span class="filename">${index + 1}. ${file.name} <small class="text-muted">(${formatFileSize(file.size)})</small></span>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn-preview btn btn-sm btn-outline-info" data-index="${index}">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button type="button" class="btn-remove btn btn-sm btn-outline-danger" data-index="${index}">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                        `;
+                        fileListUl.appendChild(li);
+                    });
+
+                    // 選擇第一個文件進行預覽
+                    if (selectedFiles.length > 0) {
+                        previewFile(selectedFiles[0]);
+                    }
+                } else {
+                    fileList.classList.add('d-none');
+                    hidePreview(); // 確保隱藏預覽
+                }
+            }
+
+            // 預覽按鈕點擊事件
+            $(document).on('click', '.btn-preview', function () {
+                const index = parseInt($(this).data('index'));
+                
+                if (index >= 0 && index < selectedFiles.length) {
+                    console.log(`預覽文件 ${index+1}: ${selectedFiles[index].name}`);
+                    previewFile(selectedFiles[index]);
+                } else {
+                    console.error('預覽索引超出範圍:', index, '總文件數:', selectedFiles.length);
+                }
+            });
+            
+            // 移除單個文件按鈕點擊事件
+            $(document).on('click', '.btn-remove', function () {
+                const index = parseInt($(this).data('index'));
+                console.log('移除文件:', selectedFiles[index].name);
+                
+                // 從陣列中移除
+                selectedFiles.splice(index, 1);
+                
+                // 更新顯示
+                updateFileList();
+                
+                // 如果沒有文件了，清除預覽
+                if (selectedFiles.length === 0) {
+                    hidePreview();
+                }
+            });
+
+            // 清除按鈕點擊事件
+            $('#clearFiles').click(function () {
+                selectedFiles = [];
+                fileInput.value = '';
+                updateFileList();
+                hidePreview();
+                console.log('清除所有已選擇的檔案');
+            });
+
+            // 合併按鈕點擊事件
+            $('#btnMerge').click(function (e) {
+                e.preventDefault();
+                
+                console.log('合併按鈕點擊', selectedFiles.length);
+                
+                if (selectedFiles.length < 2) {
+                    alert('請至少選擇兩個PDF文件進行合併');
+                    return false;
+                }
+                
+                // 創建一個新的FormData
+                const formData = new FormData();
+                
+                // 按照排序後的順序添加文件
+                selectedFiles.forEach((file, index) => {
+                    console.log(`添加檔案 ${index+1}:`, file.name, file.size);
+                    formData.append('pdfFiles', file);
+                });
+                
+                // 手動發送AJAX請求
+                $.ajax({
+                    url: '/PdfMerge/Merge',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function () {
+                        console.log('開始合併請求...');
+                        $('#btnMerge').prop('disabled', true).html('<i class="spinner-border spinner-border-sm"></i> 處理中...');
+                        showProgress();
+                    },
+                    success: function (response) {
+                        // 使用返回的HTML更新頁面內容
+                        document.open();
+                        document.write(response);
+                        document.close();
+                    },
+                    error: function (xhr, status, error) {
+                        hideProgress();
+                        $('#btnMerge').prop('disabled', false).html('<i class="bi bi-file-earmark-pdf"></i> 合併PDF');
+                        console.error('合併請求錯誤:', xhr.responseText);
+                        alert('合併時出錯: ' + error);
+                    }
+                });
+            });
+
+            // 預覽選擇的PDF文件
+            $('#btnPreview').click(function () {
+                if (selectedFiles.length > 0) {
+                    const index = 0; // 預覽第一個文件
+                    const file = selectedFiles[index];
+                    console.log('預覽選擇的文件:', file.name);
+                    
+                    const formData = new FormData();
+                    formData.append('pdfFile', file);
+                    
+                    $.ajax({
+                        url: '/PdfMerge/UploadForPreview',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        beforeSend: function () {
+                            showProgress();
+                        },
+                        success: function (response) {
+                            hideProgress();
+                            if (response.success) {
+                                // 顯示文件詳細信息
+                                getPdfInfo(response.fileName);
+                                showFullscreenPreview('/PdfMerge/Preview?fileName=' + response.fileName, response.fileName);
+                            } else {
+                                alert('預覽失敗: ' + response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            hideProgress();
+                            alert('預覽時出錯: ' + error);
+                        }
+                    });
+                } else {
+                    alert('請先選擇PDF文件');
+                }
+            });
+
+            // 獲取PDF詳細信息
+            function getPdfInfo(fileName) {
+                $.ajax({
+                    url: '/PdfMerge/GetPdfInfo',
+                    type: 'GET',
+                    data: { fileName: fileName },
+                    success: function(response) {
+                        if (response.success) {
+                            const info = response.info;
+                            $('#previewModalLabel').text(`PDF預覽: ${fileName} (${info.pageCount}頁, ${info.formattedFileSize})`);
+                        }
+                    }
+                });
+            }
+
+            // 預覽合併後的PDF
+            $('#btnPreviewMerged').click(function () {
+                const previewUrl = $(this).data('preview-url');
+                const fileName = previewUrl.split('=')[1];
+                // 獲取PDF信息並更新預覽標題
+                getPdfInfo(fileName);
+                showFullscreenPreview(previewUrl, fileName);
+            });
+
+            // 顯示全屏預覽
+            function showFullscreenPreview(url, fileName) {
+                fullscreenPdfPreview.src = url;
+                $('#previewModalLabel').text('PDF預覽: ' + fileName);
+                btnDeletePreview.setAttribute('data-file-name', fileName);
+                previewModal.show();
+            }
+
+            // 刪除預覽的PDF
+            btnDeletePreview.addEventListener('click', function() {
+                const fileName = this.getAttribute('data-file-name');
+                if (fileName) {
+                    $.ajax({
+                        url: '/PdfMerge/DeleteFile',
+                        type: 'POST',
+                        data: { fileName: fileName },
+                        success: function(response) {
+                            if (response.success) {
+                                previewModal.hide();
+                                alert('文件已成功刪除');
+                                // 如果刪除的是合併後的文件，刷新頁面
+                                if (ViewBag.FileName === fileName) {
+                                    location.reload();
+                                }
+                            } else {
+                                alert('刪除失敗: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('刪除時出錯: ' + error);
+                        }
+                    });
+                }
+            });
+
+            // 預覽單個文件
+            function previewFile(file) {
+                if (!file) {
+                    console.error('嘗試預覽空文件');
+                    hidePreview();
+                    return;
+                }
+                
+                console.log('預覽文件', file.name, file.type);
+                
+                if (file.type === 'application/pdf') {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function (e) {
+                        showPreview(e.target.result);
+                    };
+                    
+                    reader.onerror = function (e) {
+                        console.error('文件讀取錯誤', e);
+                        hidePreview();
+                        alert('文件讀取失敗');
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    console.warn('不支持的文件類型', file.type);
+                    hidePreview();
+                    alert('只能預覽PDF文件');
+                }
+            }
+
+            // 顯示預覽
+            function showPreview(dataUrl) {
+                previewPlaceholder.style.display = 'none';
+                pdfPreview.style.display = 'block';
+                pdfPreview.src = dataUrl;
+            }
+
+            // 隱藏預覽
+            function hidePreview() {
+                previewPlaceholder.style.display = 'block';
+                pdfPreview.style.display = 'none';
+                pdfPreview.src = '';
+            }
+
+            // 顯示進度條
+            function showProgress() {
+                uploadProgress.classList.remove('d-none');
+                progressBar.style.width = '0%';
+                simulateProgress();
+            }
+
+            // 隱藏進度條
+            function hideProgress() {
+                uploadProgress.classList.add('d-none');
+            }
+
+            // 模擬上傳進度
+            let progressInterval;
+            function simulateProgress() {
+                let width = 0;
+                progressInterval = setInterval(function () {
+                    if (width >= 90) {
+                        clearInterval(progressInterval);
+                    } else {
+                        width += 5;
+                        progressBar.style.width = width + '%';
+                    }
+                }, 100);
+            }
+
+            // 文件大小格式化
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                else return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+        });
+    </script>
+
+    <style>
+        .file-upload-wrapper {
+            position: relative;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .file-upload-area.highlight {
+            border-color: #2196F3;
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-message {
+            pointer-events: none;
+        }
+
+        .preview-container {
+            position: relative;
+            min-height: 300px;
+        }
+
+        #previewPlaceholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+        
+        .drag-handle {
+            cursor: grab;
+            color: #6c757d;
+        }
+        
+        .drag-handle:hover {
+            color: #0d6efd;
+        }
+        
+        .sortable-ghost {
+            opacity: 0.4;
+            background-color: #f8f9fa;
+        }
+        
+        .sortable-chosen {
+            background-color: #f8f9fa;
+        }
+        
+        .list-item {
+            transition: background-color 0.2s ease;
+        }
+        
+        .list-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .filename {
+            word-break: break-word;
+        }
+    </style>
+} 

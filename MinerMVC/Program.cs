@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MinerMVC.Data;
 using MinerMVC.Services;
 using MinerMVC.Services.Image;
+using MinerMVC.Services.PdfMerge;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IJobCrawlerService, JobCrawlerService>();
 builder.Services.AddScoped<ICustomExcelService, CustomExcelService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IPdfMergeService, PdfMergeService>();
+builder.Services.AddScoped<PdfAdapter>();
+
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.AddDebug();
+});
 
 var app = builder.Build();
 

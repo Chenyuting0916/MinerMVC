@@ -625,3 +625,6 @@ orleans.codegen.cs
 Backup*/
 UpgradeLog*.XML
 UpgradeLog*.htm
+
+# PDF生成文件
+**/wwwroot/uploads/*.pdf

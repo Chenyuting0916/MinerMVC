@@ -16,11 +16,15 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+      <PackageReference Include="itext7" Version="8.0.2" />
+      <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
+      <PackageReference Include="itext7.commons" Version="8.0.2" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Migrations" />
       <Folder Include="wwwroot\Contents" />
+      <Folder Include="wwwroot\uploads" />
     </ItemGroup>
 
 </Project>
