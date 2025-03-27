@@ -587,3 +587,146 @@ body {
     color: #fff;
     background-color: var(--vscode-hover);
 }
+
+/* Card styles */
+.card {
+    background-color: var(--vscode-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.card-header {
+    background-color: var(--vscode-sidebar);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-body {
+    background-color: var(--vscode-bg);
+    color: var(--text-color);
+}
+
+/* Form styles */
+.form-label {
+    color: var(--text-color);
+}
+
+.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    background-color: var(--input-bg);
+    border-color: var(--button-bg);
+    color: var(--text-color);
+}
+
+/* Alert styles */
+.alert {
+    background-color: var(--vscode-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: rgba(220, 53, 69, 0.2);
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.1);
+    border-color: rgba(40, 167, 69, 0.2);
+}
+
+/* List group styles */
+.list-group-item {
+    background-color: var(--vscode-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.list-group-item:hover {
+    background-color: var(--vscode-hover);
+}
+
+/* Button styles */
+.btn-outline-secondary {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--vscode-hover);
+    border-color: var(--border-color);
+}
+
+/* Progress bar styles */
+.progress {
+    background-color: var(--vscode-sidebar);
+}
+
+.progress-bar {
+    background-color: var(--button-bg);
+}
+
+/* Modal styles */
+.modal-content {
+    background-color: var(--vscode-bg);
+    border-color: var(--border-color);
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color);
+}
+
+.modal-footer {
+    border-top-color: var(--border-color);
+}
+
+/* File list styles */
+.file-list {
+    background-color: var(--vscode-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.file-list h6 {
+    color: var(--text-color);
+}
+
+.file-list .list-group-item {
+    background-color: var(--vscode-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.file-list .list-group-item:hover {
+    background-color: var(--vscode-hover);
+}
+
+.file-list .btn-group .btn {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.file-list .btn-group .btn:hover {
+    background-color: var(--vscode-hover);
+}
+
+/* Preview container styles */
+.preview-container {
+    background-color: var(--vscode-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+#previewPlaceholder {
+    color: var(--text-color);
+}
+
+#previewPlaceholder i {
+    color: var(--text-color);
+    opacity: 0.5;
+}
