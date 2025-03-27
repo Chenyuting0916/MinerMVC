@@ -628,3 +628,8 @@ UpgradeLog*.htm
 
 # PDF生成文件
 **/wwwroot/uploads/*.pdf
+
+# Cursor IDE files
+.cursor/
+.cursorrules
+.cursorrules.*
