@@ -1,0 +1,154 @@
+@using System.IO
+@{
+    ViewData["Title"] = "語音轉文字";
+}
+
+<style>
+    #transcriptionText {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        white-space: pre-line;
+        font-family: "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">語音轉文字工具</h3>
+                </div>
+                <div class="card-body">
+                    @if (!ViewBag.ModelExists)
+                    {
+                        <div class="alert alert-warning">
+                            <h5>尚未下載語音模型</h5>
+                            <p>請先下載語音模型以啟用完整功能：</p>
+                            <ol>
+                                <li>從 <a href="https://alphacephei.com/vosk/models" target="_blank">Vosk 官方網站</a> 下載以下模型：
+                                    <ul>
+                                        <li><strong>vosk-model-small-cn-0.22</strong> (中文)</li>
+                                        <li><strong>vosk-model-small-en-us-0.15</strong> (英文)</li>
+                                        <li><strong>vosk-model-small-ja-0.22</strong> (日文)</li>
+                                    </ul>
+                                </li>
+                                <li>分別解壓縮檔案到以下目錄：
+                                    <ul>
+                                        <li><code>wwwroot/vosk-model-small-cn</code> (中文)</li>
+                                        <li><code>wwwroot/vosk-model-small-en-us</code> (英文)</li>
+                                        <li><code>wwwroot/vosk-model-small-ja</code> (日文)</li>
+                                    </ul>
+                                </li>
+                                <li>重新啟動應用程式</li>
+                            </ol>
+                            <p>注意：此功能可以在不下載模型的情況下演示，但不會實際轉換語音。</p>
+                        </div>
+                    }
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="language" class="form-label">選擇語音語言</label>
+                            <select class="form-select" id="language" name="language" required>
+                                <option value="zh-CN" selected>中文</option>
+                                <option value="en-US">英文</option>
+                                <option value="ja-JP">日文</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="audioFile" class="form-label">選擇音訊檔案</label>
+                            <input type="file" class="form-control" id="audioFile" name="audioFile" accept="audio/*" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                開始轉換
+                            </button>
+                        </div>
+                    </form>
+                    <div id="progressContainer" class="mt-3" style="display: none;">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="text-center mt-2">
+                            <small class="text-muted" id="progressText">正在處理音訊檔案...</small>
+                        </div>
+                    </div>
+                    <div id="result" class="mt-4" style="display: none;">
+                        <h4>轉換結果：</h4>
+                        <div class="border p-3 rounded" id="transcriptionText"></div>
+                    </div>
+                    <div id="error" class="mt-4 alert alert-danger" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            let progressInterval;
+            
+            function startProgress() {
+                let progress = 0;
+                $('#progressContainer').show();
+                $('#submitButton').prop('disabled', true);
+                $('#submitButton .spinner-border').removeClass('d-none');
+                
+                progressInterval = setInterval(function() {
+                    progress += 5;
+                    if (progress > 90) {
+                        progress = 90;
+                    }
+                    $('.progress-bar').css('width', progress + '%');
+                }, 500);
+            }
+            
+            function stopProgress() {
+                clearInterval(progressInterval);
+                $('.progress-bar').css('width', '100%');
+                setTimeout(function() {
+                    $('#progressContainer').hide();
+                    $('#submitButton').prop('disabled', false);
+                    $('#submitButton .spinner-border').addClass('d-none');
+                }, 500);
+            }
+            
+            $('#uploadForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                var formData = new FormData();
+                formData.append('audioFile', $('#audioFile')[0].files[0]);
+                formData.append('language', $('#language').val());
+                
+                startProgress();
+                
+                $.ajax({
+                    url: '/Transcription/Transcribe',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        stopProgress();
+                        if (response.success) {
+                            $('#result').show();
+                            $('#error').hide();
+                            $('#transcriptionText').text(response.text);
+                        } else {
+                            $('#error').show();
+                            $('#result').hide();
+                            $('#error').text(response.error);
+                        }
+                    },
+                    error: function(xhr) {
+                        stopProgress();
+                        $('#error').show();
+                        $('#result').hide();
+                        $('#error').text('發生錯誤，請稍後再試');
+                    }
+                });
+            });
+        });
+    </script>
+} 

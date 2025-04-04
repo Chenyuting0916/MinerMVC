@@ -3,8 +3,12 @@ using MinerMVC.Data;
 using MinerMVC.Services;
 using MinerMVC.Services.Image;
 using MinerMVC.Services.PdfMerge;
+using MinerMVC.Services.Transcription;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 設置默認編碼為UTF-8
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
 builder.Services.AddDbContext<CustomExcelDbContext>(options =>
 {
@@ -22,6 +26,7 @@ builder.Services.AddScoped<ICustomExcelService, CustomExcelService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IPdfMergeService, PdfMergeService>();
 builder.Services.AddScoped<PdfAdapter>();
+builder.Services.AddScoped<ITranscriptionService, VoskTranscriptionService>();
 
 builder.Services.AddLogging(logging =>
 {
