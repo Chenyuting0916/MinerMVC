@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MinerMVC.Security;
 using MinerMVC.Services.PdfMerge;
 
 namespace MinerMVC.Controllers
@@ -8,8 +9,6 @@ namespace MinerMVC.Controllers
     {
         private readonly IPdfMergeService _pdfMergeService;
         private readonly ILogger<PdfMergeController> _logger;
-        private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly IConfiguration _configuration;
         
         // 用於定期清理的設置
         private static readonly TimeSpan FileCleanupAge = TimeSpan.FromHours(1); // 文件保留時間
@@ -18,14 +17,10 @@ namespace MinerMVC.Controllers
 
         public PdfMergeController(
             IPdfMergeService pdfMergeService, 
-            ILogger<PdfMergeController> logger,
-            IWebHostEnvironment hostEnvironment,
-            IConfiguration configuration)
+            ILogger<PdfMergeController> logger)
         {
             _pdfMergeService = pdfMergeService;
             _logger = logger;
-            _hostEnvironment = hostEnvironment;
-            _configuration = configuration;
         }
 
         // 首頁
@@ -38,6 +33,7 @@ namespace MinerMVC.Controllers
 
         // 合併 PDF 檔案
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RequestSizeLimit(100 * 1024 * 1024)] // 限制上傳大小為100MB
         public async Task<IActionResult> Merge(List<IFormFile> pdfFiles)
         {
@@ -57,7 +53,7 @@ namespace MinerMVC.Controllers
                     return View("Index");
                 }
 
-                if (!IsGeneratedFileExists(result.DownloadUrl!))
+                if (result.FileName == null || !IsGeneratedFileExists(result.FileName))
                 {
                     return View("Index");
                 }
@@ -68,49 +64,16 @@ namespace MinerMVC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "PDF合併過程中發生未處理的異常");
-                ViewBag.ErrorMessage = $"合併PDF時發生錯誤: {ex.Message}";
+                ViewBag.ErrorMessage = "合併PDF時發生錯誤，請稍後再試";
                 return View("Index");
             }
         }
 
-        // 檢查PDF檔案是否有效
-        private bool IsPdfFilesValid(List<IFormFile>? pdfFiles)
-        {
-            if (pdfFiles == null || pdfFiles.Count < 2)
-            {
-                string error = "請至少上傳兩個PDF檔案";
-                _logger.LogWarning(error);
-                ViewBag.ErrorMessage = error;
-                return false;
-            }
-
-            // 檢查檔案是否為PDF
-            foreach (var file in pdfFiles)
-            {
-                if (file.Length == 0)
-                {
-                    ViewBag.ErrorMessage = $"檔案 '{file.FileName}' 為空";
-                    return false;
-                }
-
-                if (!file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
-                {
-                    ViewBag.ErrorMessage = $"檔案 '{file.FileName}' 不是PDF格式";
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-        
         // 檢查生成的檔案是否存在
-        private bool IsGeneratedFileExists(string downloadUrl)
+        private bool IsGeneratedFileExists(string fileName)
         {
-            string filePath = Path.Combine(
-                _hostEnvironment.WebRootPath,
-                downloadUrl.TrimStart('/'));
-            
-            if (!System.IO.File.Exists(filePath))
+            var filePath = _pdfMergeService.ResolveUploadPath(fileName);
+            if (filePath == null || !System.IO.File.Exists(filePath))
             {
                 _logger.LogWarning("合併後的檔案不存在: {filePath}", filePath);
                 ViewBag.ErrorMessage = "合併後的檔案不存在，請重試";
@@ -140,9 +103,8 @@ namespace MinerMVC.Controllers
 
             try
             {
-                string pdfPath = Path.Combine(_hostEnvironment.WebRootPath, "uploads", fileName);
-                
-                if (!System.IO.File.Exists(pdfPath))
+                var pdfPath = _pdfMergeService.ResolveUploadPath(fileName);
+                if (pdfPath == null || !System.IO.File.Exists(pdfPath))
                 {
                     _logger.LogWarning("請求預覽的PDF檔案不存在: {fileName}", fileName);
                     return NotFound("找不到指定的PDF檔案");
@@ -152,8 +114,7 @@ namespace MinerMVC.Controllers
                 _logger.LogInformation("User {ip} previewed file: {fileName}", 
                     HttpContext.Connection.RemoteIpAddress, fileName);
 
-                byte[] fileBytes = System.IO.File.ReadAllBytes(pdfPath);
-                return new FileContentResult(fileBytes, "application/pdf");
+                return PhysicalFile(pdfPath, "application/pdf");
             }
             catch (Exception ex)
             {
@@ -163,6 +124,8 @@ namespace MinerMVC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [RequestSizeLimit(UploadRules.MaxPdfBytes)]
         public async Task<IActionResult> UploadForPreview(IFormFile pdfFile)
         {
             if (pdfFile == null || pdfFile.Length == 0)
@@ -170,21 +133,22 @@ namespace MinerMVC.Controllers
                 return Json(new { success = false, message = "未提供檔案或檔案為空" });
             }
 
-            if (!pdfFile.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            if (pdfFile.Length > UploadRules.MaxPdfBytes ||
+                !SafePath.GetClientFileName(pdfFile.FileName).EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
             {
-                return Json(new { success = false, message = "只支援PDF格式檔案" });
+                return Json(new { success = false, message = "只支援 50 MB 以內的 PDF 檔案" });
             }
 
             try
             {
-                string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "uploads");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
+                Directory.CreateDirectory(_pdfMergeService.UploadsDirectory);
 
                 string uniqueFileName = $"preview_{Guid.NewGuid():N}.pdf";
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                var filePath = _pdfMergeService.ResolveUploadPath(uniqueFileName);
+                if (filePath == null)
+                {
+                    return Json(new { success = false, message = "無法儲存預覽檔案" });
+                }
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -204,11 +168,12 @@ namespace MinerMVC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "上傳PDF預覽檔案時發生錯誤: {fileName}", pdfFile.FileName);
-                return Json(new { success = false, message = $"上傳預覽檔案時發生錯誤: {ex.Message}" });
+                return Json(new { success = false, message = "上傳預覽檔案時發生錯誤，請稍後再試" });
             }
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
@@ -218,9 +183,8 @@ namespace MinerMVC.Controllers
             
             try
             {
-                string filePath = Path.Combine(_hostEnvironment.WebRootPath, "uploads", fileName);
-                
-                if (System.IO.File.Exists(filePath))
+                var filePath = _pdfMergeService.ResolveUploadPath(fileName);
+                if (filePath != null && System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
                     _logger.LogInformation("用戶刪除檔案: {fileName}", fileName);
@@ -232,7 +196,7 @@ namespace MinerMVC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "刪除檔案時發生錯誤: {fileName}", fileName);
-                return Json(new { success = false, message = $"刪除檔案時發生錯誤: {ex.Message}" });
+                return Json(new { success = false, message = "刪除檔案時發生錯誤，請稍後再試" });
             }
         }
 
@@ -247,9 +211,8 @@ namespace MinerMVC.Controllers
             
             try
             {
-                string filePath = Path.Combine(_hostEnvironment.WebRootPath, "uploads", fileName);
-                
-                if (!System.IO.File.Exists(filePath))
+                var filePath = _pdfMergeService.ResolveUploadPath(fileName);
+                if (filePath == null || !System.IO.File.Exists(filePath))
                 {
                     return Json(new { success = false, message = "文件不存在" });
                 }
@@ -264,7 +227,7 @@ namespace MinerMVC.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "獲取PDF信息時發生錯誤: {fileName}", fileName);
-                return Json(new { success = false, message = $"獲取PDF信息時發生錯誤: {ex.Message}" });
+                return Json(new { success = false, message = "取得PDF資訊時發生錯誤，請稍後再試" });
             }
         }
 
@@ -287,7 +250,7 @@ namespace MinerMVC.Controllers
                 }
 
                 _lastCleanupTime = now;
-                string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "uploads");
+                string uploadsFolder = _pdfMergeService.UploadsDirectory;
                 
                 if (!Directory.Exists(uploadsFolder))
                 {
@@ -334,8 +297,8 @@ namespace MinerMVC.Controllers
 
             try
             {
-                string filePath = Path.Combine(_hostEnvironment.WebRootPath, "uploads", fileName);
-                if (!System.IO.File.Exists(filePath))
+                var filePath = _pdfMergeService.ResolveUploadPath(fileName);
+                if (filePath == null || !System.IO.File.Exists(filePath))
                 {
                     _logger.LogWarning("請求下載的PDF檔案不存在: {fileName}", fileName);
                     return NotFound("找不到指定的PDF檔案");
@@ -345,11 +308,7 @@ namespace MinerMVC.Controllers
                 _logger.LogInformation("User {ip} downloaded file: {fileName}", 
                     HttpContext.Connection.RemoteIpAddress, fileName);
                 
-                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-                return new FileContentResult(fileBytes, "application/pdf")
-                {
-                    FileDownloadName = fileName
-                };
+                return PhysicalFile(filePath, "application/pdf", fileName);
             }
             catch (Exception ex)
             {

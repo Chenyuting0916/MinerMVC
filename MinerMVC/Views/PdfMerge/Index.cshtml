@@ -171,10 +171,9 @@
                     
                     // 更新索引顯示
                     const filename = item.querySelector('.filename');
-                    if (filename) {
-                        const originalText = filename.innerHTML;
-                        const updatedText = originalText.replace(/^\d+\./, `${newIndex + 1}.`);
-                        filename.innerHTML = updatedText;
+                    const file = selectedFiles[oldIndex];
+                    if (filename && file) {
+                        filename.textContent = `${newIndex + 1}. ${file.name} (${formatFileSize(file.size)})`;
                     }
                     
                     // 更新按鈕索引
@@ -256,20 +255,41 @@
                         const li = document.createElement('li');
                         li.className = 'list-group-item d-flex justify-content-between align-items-center list-item';
                         li.setAttribute('data-original-index', index);
-                        li.innerHTML = `
-                            <div class="d-flex align-items-center flex-grow-1">
-                                <span class="drag-handle me-2" title="拖曳調整順序"><i class="bi bi-grip-vertical"></i></span>
-                                <span class="filename">${index + 1}. ${file.name} <small class="text-muted">(${formatFileSize(file.size)})</small></span>
-                            </div>
-                            <div class="btn-group">
-                                <button type="button" class="btn-preview btn btn-sm btn-outline-info" data-index="${index}">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button type="button" class="btn-remove btn btn-sm btn-outline-danger" data-index="${index}">
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-                            </div>
-                        `;
+
+                        const left = document.createElement('div');
+                        left.className = 'd-flex align-items-center flex-grow-1';
+                        const handle = document.createElement('span');
+                        handle.className = 'drag-handle me-2';
+                        handle.title = '拖曳調整順序';
+                        const grip = document.createElement('i');
+                        grip.className = 'bi bi-grip-vertical';
+                        handle.appendChild(grip);
+                        const filename = document.createElement('span');
+                        filename.className = 'filename';
+                        filename.textContent = `${index + 1}. ${file.name} (${formatFileSize(file.size)})`;
+                        left.appendChild(handle);
+                        left.appendChild(filename);
+
+                        const actions = document.createElement('div');
+                        actions.className = 'btn-group';
+                        const previewBtn = document.createElement('button');
+                        previewBtn.type = 'button';
+                        previewBtn.className = 'btn-preview btn btn-sm btn-outline-info';
+                        previewBtn.setAttribute('data-index', index);
+                        const previewIcon = document.createElement('i');
+                        previewIcon.className = 'bi bi-eye';
+                        previewBtn.appendChild(previewIcon);
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className = 'btn-remove btn btn-sm btn-outline-danger';
+                        removeBtn.setAttribute('data-index', index);
+                        const removeIcon = document.createElement('i');
+                        removeIcon.className = 'bi bi-x-lg';
+                        removeBtn.appendChild(removeIcon);
+                        actions.appendChild(previewBtn);
+                        actions.appendChild(removeBtn);
+                        li.appendChild(left);
+                        li.appendChild(actions);
                         fileListUl.appendChild(li);
                     });
 

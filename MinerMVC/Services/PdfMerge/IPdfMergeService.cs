@@ -2,6 +2,8 @@ namespace MinerMVC.Services.PdfMerge
 {
     public interface IPdfMergeService
     {
+        string UploadsDirectory { get; }
+
         Task<PdfMergeResult> MergePdfFilesAsync(IEnumerable<IFormFile> pdfFiles);
         
         PdfPreviewInfo GetPdfInfo(string fileName);
@@ -9,6 +11,8 @@ namespace MinerMVC.Services.PdfMerge
         void CleanupTemporaryFiles();
         
         bool DeleteFile(string fileName);
+
+        string? ResolveUploadPath(string? fileName);
     }
     
     public class PdfMergeResult

@@ -1,0 +1,10 @@
+{
+  "ConnectionStrings": {
+    "CustomExcelDbContext": "Server=(localdb)\\ProjectModels;Initial Catalog=CustomExcelDb;Integrated Security=True;TrustServerCertificate=true;",
+    "DailyTaskDbContext": "Server=(localdb)\\ProjectModels;Initial Catalog=DailyTaskDb;Integrated Security=True;TrustServerCertificate=true;"
+  },
+  "Auth": {
+    "Username": "",
+    "Password": ""
+  }
+}

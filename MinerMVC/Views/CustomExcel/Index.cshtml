@@ -9,6 +9,11 @@
 
 @model List<MinerMVC.ViewModel.CustomExcelViewModel>
 
+@if (TempData["Error"] is string errorMessage)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
 <div class="excel-header">
     <h1 class="excel-title">Custom Excel</h1>
     <div class="excel-actions">
@@ -37,7 +42,7 @@
                     </div>
                 </div>
                 <div class="card-image">
-                    <img class="image-thumbnail" src="~/Contents/@customExcel.value.ImageName" alt="Uploaded Image">
+                    <img class="image-thumbnail" src="@Url.Action("Image", "CustomExcel", new { name = customExcel.value.ImageName })" alt="Uploaded Image">
                 </div>
                 <div class="card-body">
                     <p class="card-description" title="@customExcel.value.Description">@customExcel.value.Description</p>

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MinerMVC.Data;
 using MinerMVC.Models.NewFolder;
-using System;
 
+[Authorize]
 public class DailyTaskController : Controller
 {
     private readonly DailyTaskDbContext _context;
@@ -24,6 +25,7 @@ public class DailyTaskController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Create(DailyTask task)
     {
         if (ModelState.IsValid)
@@ -42,6 +44,7 @@ public class DailyTaskController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Edit(DailyTask task)
     {
         if (ModelState.IsValid)
@@ -53,9 +56,14 @@ public class DailyTaskController : Controller
         return View(task);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Delete(int id)
     {
         var task = _context.DailyTasks.Find(id);
+        if (task == null)
+            return NotFound();
+
         _context.Remove(task);
         _context.SaveChanges();
         return RedirectToAction("Index");

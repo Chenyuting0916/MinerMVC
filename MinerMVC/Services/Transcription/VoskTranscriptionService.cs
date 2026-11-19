@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using MinerMVC.Security;
 using NAudio.Wave;
 using System.Text;
 using Vosk;
@@ -47,12 +48,22 @@ namespace MinerMVC.Services.Transcription
         public async Task<TranscriptionResult> TranscribeAsync(IFormFile audioFile, string language)
         {
             // 驗證輸入
-            if (audioFile == null || audioFile.Length == 0)
+            if (audioFile == null || audioFile.Length == 0 || audioFile.Length > UploadRules.MaxAudioBytes)
             {
                 return new TranscriptionResult
                 {
                     Success = false,
-                    ErrorMessage = "請上傳音訊檔案"
+                    ErrorMessage = "請上傳 25 MB 以內的音訊檔案"
+                };
+            }
+
+            var audioExtension = Path.GetExtension(SafePath.GetClientFileName(audioFile.FileName));
+            if (!UploadRules.IsAllowedAudioExtension(audioExtension))
+            {
+                return new TranscriptionResult
+                {
+                    Success = false,
+                    ErrorMessage = "不支援的音訊格式"
                 };
             }
             
@@ -83,7 +94,7 @@ namespace MinerMVC.Services.Transcription
             _logger.LogInformation($"開始處理 {audioFile.FileName}（{GetLanguageName(language)}）");
             
             // 臨時檔案路徑
-            var tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + Path.GetExtension(audioFile.FileName));
+            var tempFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + audioExtension);
             var wavFilePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".wav");
             
             try
@@ -141,7 +152,7 @@ namespace MinerMVC.Services.Transcription
                 return new TranscriptionResult
                 {
                     Success = false,
-                    ErrorMessage = $"處理過程中發生錯誤: {ex.Message}"
+                    ErrorMessage = "處理過程中發生錯誤，請稍後再試"
                 };
             }
             finally
