@@ -48,7 +48,7 @@ cd TimeMiner
 dotnet restore
 ```
 
-4. Update the database:
+4. Copy `MinerMVC/appsettings.Development.json.example` to `MinerMVC/appsettings.Development.json`, then update the database:
 ```bash
 dotnet ef database update
 ```
@@ -62,8 +62,17 @@ The application will run at `https://localhost:5001` and `http://localhost:5000`
 
 ### Configuration
 
-1. Database connection string is configured in `appsettings.json`
-2. File upload path configuration is in the `FileUploadSettings` section of `appsettings.json`
+Do not commit passwords or production connection strings. `appsettings.json` keeps the connection strings empty.
+
+1. Local database: copy `MinerMVC/appsettings.Development.json.example` to `MinerMVC/appsettings.Development.json` (this file is gitignored) and change the local password.
+2. Azure App Service application settings (set the values in Azure, not in git):
+   - `ConnectionStrings__CustomExcelDbContext`
+   - `ConnectionStrings__DailyTaskDbContext`
+   - `Auth__Username`
+   - `Auth__Password`
+
+   Portal connection strings named `CustomExcelDbContext` and `DailyTaskDbContext` are also read.
+3. Custom Excel and Daily Task require that login. PDF merge, timer, and transcription stay available without it.
 
 ### Modules
 
@@ -133,7 +142,7 @@ cd TimeMiner
 dotnet restore
 ```
 
-4. 更新數據庫：
+4. 將 `MinerMVC/appsettings.Development.json.example` 複製為 `MinerMVC/appsettings.Development.json`，再更新數據庫：
 ```bash
 dotnet ef database update
 ```
@@ -147,8 +156,17 @@ dotnet run
 
 ### 配置
 
-1. 數據庫連接字符串在 `appsettings.json` 中配置
-2. 文件上傳路徑配置在 `appsettings.json` 中的 `FileUploadSettings` 部分
+不要把密碼或正式環境連線字串提交到 git。`appsettings.json` 裡的連線字串保持空白。
+
+1. 本機資料庫：把 `MinerMVC/appsettings.Development.json.example` 複製成 `MinerMVC/appsettings.Development.json`（此檔已被 git 忽略），並改掉本機密碼。
+2. Azure App Service 應用程式設定（值只放在 Azure）：
+   - `ConnectionStrings__CustomExcelDbContext`
+   - `ConnectionStrings__DailyTaskDbContext`
+   - `Auth__Username`
+   - `Auth__Password`
+
+   入口網站「連接字串」若名稱是 `CustomExcelDbContext` 與 `DailyTaskDbContext`，程式也會讀取。
+3. Custom Excel 與 Daily Task 需要上述登入。PDF 合併、計時器與語音轉文字不需登入。
 
 ### 功能模塊
 

@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MinerMVC.Models.Request;
+using MinerMVC.Security;
 using MinerMVC.Services;
 using MinerMVC.Services.Image;
 using MinerMVC.ViewModel;
 
 namespace MinerMVC.Controllers;
 
+[Authorize]
 public class CustomExcelController : Controller
 {
     private readonly ICustomExcelService _customExcelService;
@@ -23,15 +26,30 @@ public class CustomExcelController : Controller
         return View(model);
     }
 
-    [HttpPost]
-    public async Task<ActionResult> Insert(CustomExcelRequest customExcelRequest)
+    [HttpGet]
+    public IActionResult Image(string name)
     {
-        customExcelRequest.ImageName = await _imageService.AddImage(customExcelRequest.Image);
+        var path = _imageService.TryResolveImagePath(name);
+        if (path == null)
+            return NotFound();
+
+        return PhysicalFile(path, UploadRules.ImageContentType(path));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Insert(CustomExcelRequest customExcelRequest)
+    {
+        var rejected = await TryAssignImageAsync(customExcelRequest, editing: false);
+        if (rejected != null)
+            return rejected;
+
         _customExcelService.Insert(customExcelRequest.ToCustomExcel());
         return RedirectToAction("Index", "CustomExcel");
     }
 
-    [HttpGet]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Delete(int id)
     {
         _imageService.DeleteImage(_customExcelService.Get(id).ImageName);
@@ -40,18 +58,37 @@ public class CustomExcelController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(CustomExcelRequest customExcelRequest)
     {
-        customExcelRequest.ImageName =
-            await _imageService.EditImage(customExcelRequest.Image, customExcelRequest.ImageName!);
+        var rejected = await TryAssignImageAsync(customExcelRequest, editing: true);
+        if (rejected != null)
+            return rejected;
 
         _customExcelService.Edit(customExcelRequest.ToCustomExcel());
         return RedirectToAction("Index", "CustomExcel");
     }
 
     [HttpPut]
+    [ValidateAntiForgeryToken]
     public void UpdateVerifiedStatus(int id, bool status)
     {
         _customExcelService.UpdateVerifiedStatus(id, status);
+    }
+
+    private async Task<IActionResult?> TryAssignImageAsync(CustomExcelRequest request, bool editing)
+    {
+        try
+        {
+            request.ImageName = editing
+                ? await _imageService.EditImage(request.Image, request.ImageName ?? "default.png")
+                : await _imageService.AddImage(request.Image);
+            return null;
+        }
+        catch (InvalidOperationException)
+        {
+            TempData["Error"] = "只接受 jpg、jpeg、png、gif 或 webp 圖片，且大小不可超過 5 MB。";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

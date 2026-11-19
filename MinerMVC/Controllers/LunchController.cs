@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MinerMVC.Models.CustomExcelDb;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MinerMVC.Services;
 
 namespace MinerMVC.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class LunchController : ControllerBase
 {

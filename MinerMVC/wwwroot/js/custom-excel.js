@@ -50,7 +50,7 @@ $(document).ready(function () {
         $("#editDescription").val(description);
         $("#editImageName").attr("value", image);
         $("#editVerified").prop("checked", verified);
-        $("#editImagePreview").attr("src", "/Contents/" + image);
+        $("#editImagePreview").attr("src", "/CustomExcel/Image?name=" + encodeURIComponent(image));
 
         let editModal = new bootstrap.Modal(document.getElementById('EditModal'));
         editModal.show();
@@ -71,7 +71,8 @@ $(document).ready(function () {
         
         $.ajax({
             url: '/CustomExcel/Delete',
-            type: 'GET',
+            type: 'POST',
+            headers: { 'RequestVerificationToken': document.querySelector('meta[name="csrf-token"]').content },
             data: { id: id },
             success: function () {
                 window.location.reload();
@@ -121,6 +122,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/CustomExcel/UpdateVerifiedStatus',
             type: 'PUT',
+            headers: { 'RequestVerificationToken': document.querySelector('meta[name="csrf-token"]').content },
             data: { id: id, status: isChecked }
         });
     });
@@ -136,6 +138,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/CustomExcel/Edit',
             type: 'POST',
+            headers: { 'RequestVerificationToken': document.querySelector('meta[name="csrf-token"]').content },
             data: formData,
             processData: false,
             contentType: false,

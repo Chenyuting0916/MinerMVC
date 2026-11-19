@@ -1,5 +1,6 @@
 ﻿using MinerMVC.Data;
 using MinerMVC.Models.CustomExcelDb;
+using MinerMVC.Security;
 
 namespace MinerMVC.Services;
 
@@ -40,7 +41,8 @@ public class CustomExcelService : ICustomExcelService
         var dbCustomExcel = _customExcelDbContext.CustomExcels.First(x => x.Id == customExcel.Id);
         dbCustomExcel.Description = customExcel.Description;
         dbCustomExcel.Name = customExcel.Name;
-        dbCustomExcel.ImageName = customExcel.ImageName;
+        if (UploadRules.IsAllowedImageFileName(customExcel.ImageName))
+            dbCustomExcel.ImageName = customExcel.ImageName;
         dbCustomExcel.Verified = customExcel.Verified;
         _customExcelDbContext.SaveChanges();
     }

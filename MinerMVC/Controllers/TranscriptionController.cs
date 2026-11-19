@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MinerMVC.Security;
 using MinerMVC.Services.Transcription;
 
 namespace MinerMVC.Controllers
@@ -21,6 +22,8 @@ namespace MinerMVC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [RequestSizeLimit(UploadRules.MaxAudioBytes)]
         public async Task<IActionResult> Transcribe(IFormFile audioFile, string language)
         {
             try
